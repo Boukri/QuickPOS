@@ -1,0 +1,114 @@
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:QuickPOS.Models.Enums"
+        x:Class="QuickPOS.Features.Inventory.Components.ReceiveStockDialog"
+        Title="Receive Stock"
+        SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        ResizeMode="NoResize">
+
+	<Border Background="{StaticResource SurfaceLowestBrush}"
+            CornerRadius="16" Padding="36" Width="520"
+            Margin="20">
+		<Border.Effect>
+			<DropShadowEffect BlurRadius="40" Opacity="0.18" ShadowDepth="8"/>
+		</Border.Effect>
+		<StackPanel>
+
+			<!-- Header -->
+			<DockPanel Margin="0,0,0,20">
+				<StackPanel>
+					<TextBlock Text="RECEIVE STOCK" FontFamily="Inter, Segoe UI" FontSize="11"
+                               FontWeight="ExtraBold" Foreground="{StaticResource OnSurfaceVariantBrush}"/>
+					<TextBlock Text="Add a new inventory batch and update product pricing"
+                               FontFamily="Inter, Segoe UI" FontSize="12"
+                               Foreground="{StaticResource OutlineBrush}" Margin="0,2,0,0"/>
+				</StackPanel>
+				<Button DockPanel.Dock="Right" HorizontalAlignment="Right"
+                        Content="&#x2715;" Width="32" Height="32"
+                        Style="{StaticResource IconButtonStyle}"
+                        Click="Cancel_Click"/>
+			</DockPanel>
+
+			<!-- Product selector -->
+			<TextBlock Text="PRODUCT" Style="{StaticResource FormLabelStyle}"/>
+			<ComboBox ItemsSource="{Binding Products}"
+                      SelectedItem="{Binding SelectedProduct}"
+                      Style="{StaticResource FormComboStyle}"
+                      Margin="0,0,0,16"/>
+
+			<!-- Quantity + Purchase price row -->
+			<Grid Margin="0,0,0,16">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="16"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+
+				<StackPanel Grid.Column="0">
+					<TextBlock Text="QUANTITY RECEIVED" Style="{StaticResource FormLabelStyle}"/>
+					<TextBox Text="{Binding ReceiveQuantity, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{StaticResource FormInputStyle}"/>
+				</StackPanel>
+
+				<StackPanel Grid.Column="2">
+					<TextBlock Text="PURCHASE PRICE" Style="{StaticResource FormLabelStyle}"/>
+					<TextBox Text="{Binding ReceiveUnitCost, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{StaticResource FormInputStyle}"/>
+				</StackPanel>
+			</Grid>
+
+			<!-- Sell price + Costing method row -->
+			<Grid Margin="0,0,0,16">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="16"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+
+				<StackPanel Grid.Column="0">
+					<TextBlock Text="SELLING PRICE" Style="{StaticResource FormLabelStyle}"/>
+					<TextBox Text="{Binding ReceiveSellPrice, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{StaticResource FormInputStyle}"/>
+				</StackPanel>
+
+				<StackPanel Grid.Column="2">
+					<TextBlock Text="COSTING METHOD" Style="{StaticResource FormLabelStyle}"/>
+					<ComboBox SelectedValue="{Binding ReceiveCostingMethod}"
+                              SelectedValuePath="Tag"
+                              Style="{StaticResource FormComboStyle}">
+						<ComboBoxItem Content="Weighted Average" Tag="{x:Static local:CostingMethod.WeightedAverage}"/>
+						<ComboBoxItem Content="FIFO"             Tag="{x:Static local:CostingMethod.Fifo}"/>
+						<ComboBoxItem Content="LIFO"             Tag="{x:Static local:CostingMethod.Lifo}"/>
+
+					</ComboBox>
+				</StackPanel>
+			</Grid>
+
+			<!-- Reference / PO# -->
+			<TextBlock Text="REFERENCE / PO# (OPTIONAL)" Style="{StaticResource FormLabelStyle}"/>
+			<TextBox Text="{Binding ReceiveReference, UpdateSourceTrigger=PropertyChanged}"
+                     Style="{StaticResource FormInputStyle}"
+                     Margin="0,0,0,28"/>
+
+			<!-- Actions -->
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="12"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+				<Button Grid.Column="0" Content="CANCEL"
+                        Style="{StaticResource SecondaryButtonStyle}"
+                        Height="48" Click="Cancel_Click"/>
+				<Button Grid.Column="2" Content="SAVE BATCH"
+                        Style="{StaticResource PrimaryButtonStyle}"
+                        Height="48" Command="{Binding ConfirmReceiveStockCommand}"/>
+			</Grid>
+
+		</StackPanel>
+	</Border>
+</Window>

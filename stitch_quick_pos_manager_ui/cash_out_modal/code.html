@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Daily Close Report - The Clinical Sanctuary</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed": "#0d1c2e",
+                        "tertiary-fixed": "#ffdbce",
+                        "inverse-surface": "#2d3133",
+                        "on-surface-variant": "#3f4948",
+                        "secondary-container": "#d5e3fc",
+                        "error-container": "#ffdad6",
+                        "surface-variant": "#e0e3e5",
+                        "surface-container-low": "#f2f4f6",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-tertiary-fixed": "#370e00",
+                        "on-background": "#191c1e",
+                        "primary-container": "#2d7d78",
+                        "surface-bright": "#f7f9fb",
+                        "surface-tint": "#106a65",
+                        "primary-fixed-dim": "#88d4ce",
+                        "surface-container": "#eceef0",
+                        "on-tertiary-container": "#fff4f1",
+                        "tertiary-fixed-dim": "#ffb598",
+                        "outline": "#6f7978",
+                        "on-error-container": "#93000a",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary": "#85482f",
+                        "on-primary-container": "#d8fffb",
+                        "surface-dim": "#d8dadc",
+                        "surface-container-high": "#e6e8ea",
+                        "surface": "#f7f9fb",
+                        "on-secondary-fixed-variant": "#3a485b",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-tertiary-fixed-variant": "#6f371f",
+                        "on-primary": "#ffffff",
+                        "on-surface": "#191c1e",
+                        "error": "#ba1a1a",
+                        "background": "#f7f9fb",
+                        "on-error": "#ffffff",
+                        "primary": "#02645f",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed-variant": "#00504c",
+                        "primary-fixed": "#a4f0ea",
+                        "on-secondary-container": "#57657a",
+                        "inverse-primary": "#88d4ce",
+                        "secondary": "#515f74",
+                        "tertiary-container": "#a26045",
+                        "outline-variant": "#bec9c7",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed": "#d5e3fc",
+                        "secondary-fixed-dim": "#b9c7df",
+                        "on-primary-fixed": "#00201e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface">
+<!-- Top Navigation -->
+<nav class="bg-slate-50/80 dark:bg-slate-900/80 backdrop-blur-xl flex justify-between items-center w-full px-6 py-3 h-16 z-40 fixed top-0 shadow-sm">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold text-[#02645f] dark:text-[#a4f0ea] tracking-tight font-headline">The Clinical Sanctuary</span>
+<div class="hidden md:flex items-center gap-6">
+<a class="text-slate-500 font-['Manrope'] font-semibold text-sm tracking-tight hover:text-[#02645f]" href="#">Register</a>
+<a class="text-slate-500 font-['Manrope'] font-semibold text-sm tracking-tight hover:text-[#02645f]" href="#">Inventory</a>
+<a class="text-[#02645f] font-bold border-b-2 border-[#02645f] font-['Manrope'] text-sm tracking-tight" href="#">Reports</a>
+<a class="text-slate-500 font-['Manrope'] font-semibold text-sm tracking-tight hover:text-[#02645f]" href="#">Customers</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-slate-500 hover:bg-slate-100/50 p-2 rounded-full cursor-pointer">notifications</span>
+<span class="material-symbols-outlined text-slate-500 hover:bg-slate-100/50 p-2 rounded-full cursor-pointer">settings</span>
+<div class="w-8 h-8 rounded-full overflow-hidden">
+<img alt="Store Manager Profile" class="w-full h-full object-cover" data-alt="professional portrait of a store manager in a clean clinical setting with neutral lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5NWb6IitZodJe1mA0lqM8cgpdjlsIKEbz_5zeO2XO7xyEVbzhAfh8s5bxwfHT4UW3kWtWnh3RJv0FJQjsS9KNv-AuswdSJ1FLtLMyFLRadSdiDrFXu0p2V-ak8RasS87RE8MfU3gC7Vl1_wJd_4JHKiYc60ebivBXhrJH76gj21CyGkd7Vx4f5-ebXpVE242efgi_aQY35X4Zyvdp0jQcoHfhcBxcmPv02GfV60ouGp5PZNQzAqyThRoZcakzCIziSZWRkem-SNA"/>
+</div>
+</div>
+</nav>
+<!-- Side Navigation (Mobile/Tablet Pivot) -->
+<aside class="hidden lg:flex flex-col h-screen py-8 space-y-6 bg-slate-100 dark:bg-slate-950 h-full w-64 fixed left-0 top-0 pt-20 shadow-2xl">
+<div class="px-6 mb-4">
+<p class="font-['Manrope'] font-black text-[#02645f] text-lg">Main Terminal</p>
+<p class="font-['Inter'] font-medium text-xs uppercase tracking-widest text-slate-500">Clinical East Wing</p>
+</div>
+<nav class="flex-1 space-y-2">
+<div class="flex items-center px-4 py-3 text-slate-500 hover:bg-slate-200/50 mx-4 rounded-xl transition-transform duration-200 hover:translate-x-1 cursor-pointer">
+<span class="material-symbols-outlined mr-3">point_of_sale</span>
+<span class="font-['Inter'] font-medium text-xs uppercase tracking-widest">Register</span>
+</div>
+<div class="flex items-center px-4 py-3 text-slate-500 hover:bg-slate-200/50 mx-4 rounded-xl transition-transform duration-200 hover:translate-x-1 cursor-pointer">
+<span class="material-symbols-outlined mr-3">inventory_2</span>
+<span class="font-['Inter'] font-medium text-xs uppercase tracking-widest">Inventory</span>
+</div>
+<div class="flex items-center px-4 py-3 bg-white dark:bg-slate-900 text-[#02645f] dark:text-[#a4f0ea] rounded-l-full ml-4 shadow-sm font-bold transition-transform duration-200 hover:translate-x-1 cursor-pointer">
+<span class="material-symbols-outlined mr-3">analytics</span>
+<span class="font-['Inter'] font-medium text-xs uppercase tracking-widest">Reports</span>
+</div>
+<div class="flex items-center px-4 py-3 text-slate-500 hover:bg-slate-200/50 mx-4 rounded-xl transition-transform duration-200 hover:translate-x-1 cursor-pointer">
+<span class="material-symbols-outlined mr-3">group</span>
+<span class="font-['Inter'] font-medium text-xs uppercase tracking-widest">Customers</span>
+</div>
+</nav>
+<div class="px-4 pb-4">
+<button class="w-full py-4 bg-gradient-to-br from-[#02645f] to-[#2d7d78] text-white rounded-xl font-headline font-bold shadow-lg hover:opacity-90 transition-all active:scale-[0.98]">
+                Quick Transaction
+            </button>
+</div>
+</aside>
+<!-- Main Content (Daily Close Report Background) -->
+<main class="lg:ml-64 pt-24 px-8 pb-12 min-h-screen bg-surface-container-low">
+<header class="mb-8 flex justify-between items-end">
+<div>
+<h1 class="text-4xl font-headline font-extrabold text-on-surface tracking-tight">Daily Close Report</h1>
+<p class="text-on-surface-variant font-medium mt-1">Friday, October 27, 2023 | Terminal 04</p>
+</div>
+<div class="flex gap-3">
+<button class="px-6 py-2 rounded-xl bg-surface-container-highest text-on-surface font-semibold hover:bg-surface-variant transition-colors">Export PDF</button>
+<button class="px-6 py-2 rounded-xl bg-primary text-on-primary font-semibold shadow-md">Print Summary</button>
+</div>
+</header>
+<!-- Metrics Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border-l-4 border-primary">
+<p class="text-label-sm uppercase tracking-wider text-outline mb-2">Total Gross Sales</p>
+<h2 class="text-3xl font-headline font-extrabold text-primary">$12,482.50</h2>
+<p class="text-xs text-primary mt-2 font-medium">↑ 14% vs yesterday</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border-l-4 border-secondary">
+<p class="text-label-sm uppercase tracking-wider text-outline mb-2">Card Payments</p>
+<h2 class="text-3xl font-headline font-extrabold text-on-surface">$8,120.00</h2>
+<p class="text-xs text-on-surface-variant mt-2">142 Transactions</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border-l-4 border-tertiary">
+<p class="text-label-sm uppercase tracking-wider text-outline mb-2">Cash Expected</p>
+<h2 class="text-3xl font-headline font-extrabold text-on-surface">$4,362.50</h2>
+<p class="text-xs text-on-surface-variant mt-2">Opening: $500.00</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border-l-4 border-primary-fixed-dim">
+<p class="text-label-sm uppercase tracking-wider text-outline mb-2">Refunds</p>
+<h2 class="text-3xl font-headline font-extrabold text-error">$0.00</h2>
+<p class="text-xs text-outline mt-2">Perfect shift record</p>
+</div>
+</div>
+<!-- Table View Section -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden mb-8">
+<div class="px-6 py-4 bg-surface-container-low flex items-center justify-between">
+<h3 class="font-headline font-bold text-lg">Transaction Log</h3>
+<span class="material-symbols-outlined text-outline cursor-pointer">filter_list</span>
+</div>
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-high">
+<tr>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-outline">Time</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-outline">ID</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-outline">Type</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-outline">Customer</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-outline text-right">Amount</th>
+</tr>
+</thead>
+<tbody>
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low transition-colors">
+<td class="px-6 py-4 text-sm font-medium">18:42</td>
+<td class="px-6 py-4 text-sm text-outline font-mono">TXN-9021</td>
+<td class="px-6 py-4 text-sm">
+<span class="px-3 py-1 rounded-full bg-primary-fixed-dim text-on-primary-fixed-variant text-xs font-bold uppercase">Card</span>
+</td>
+<td class="px-6 py-4 text-sm">Amara Singh</td>
+<td class="px-6 py-4 text-sm font-bold text-right">$420.00</td>
+</tr>
+<tr class="bg-surface-container-low/50 hover:bg-surface-container-low transition-colors">
+<td class="px-6 py-4 text-sm font-medium">18:35</td>
+<td class="px-6 py-4 text-sm text-outline font-mono">TXN-9020</td>
+<td class="px-6 py-4 text-sm">
+<span class="px-3 py-1 rounded-full bg-surface-container-highest text-on-surface-variant text-xs font-bold uppercase">Cash</span>
+</td>
+<td class="px-6 py-4 text-sm">Julian Vance</td>
+<td class="px-6 py-4 text-sm font-bold text-right">$85.50</td>
+</tr>
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low transition-colors">
+<td class="px-6 py-4 text-sm font-medium">18:12</td>
+<td class="px-6 py-4 text-sm text-outline font-mono">TXN-9019</td>
+<td class="px-6 py-4 text-sm">
+<span class="px-3 py-1 rounded-full bg-primary-fixed-dim text-on-primary-fixed-variant text-xs font-bold uppercase">Card</span>
+</td>
+<td class="px-6 py-4 text-sm">Elena Rodriguez</td>
+<td class="px-6 py-4 text-sm font-bold text-right">$1,150.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+</main>
+<!-- Cash Out Modal Overlay -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-on-background/40 backdrop-blur-[4px]">
+<div class="bg-surface-container-lowest w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden glass-panel flex flex-col max-h-[921px]">
+<!-- Modal Header -->
+<div class="px-8 py-6 flex items-center justify-between border-b border-outline-variant/10">
+<div>
+<h2 class="text-2xl font-headline font-black text-primary tracking-tight">Finalize Cash Out</h2>
+<p class="text-on-surface-variant text-sm font-medium">Complete end-of-day reconciliation for Terminal 04</p>
+</div>
+<button class="text-outline hover:text-on-surface p-2 rounded-full hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Modal Content (Scrollable) -->
+<div class="p-8 space-y-8 overflow-y-auto">
+<!-- Section: Cash Reconciliation -->
+<section>
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary">payments</span>
+<h3 class="font-headline font-bold text-lg text-on-surface">Cash Reconciliation</h3>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+<div class="space-y-1">
+<label class="text-[10px] font-bold text-outline uppercase tracking-widest pl-1">Count 100s</label>
+<input class="w-full bg-surface-container-low border-0 rounded-xl focus:ring-2 focus:ring-primary text-sm p-3" placeholder="0" type="number"/>
+</div>
+<div class="space-y-1">
+<label class="text-[10px] font-bold text-outline uppercase tracking-widest pl-1">Count 50s</label>
+<input class="w-full bg-surface-container-low border-0 rounded-xl focus:ring-2 focus:ring-primary text-sm p-3" placeholder="0" type="number"/>
+</div>
+<div class="space-y-1">
+<label class="text-[10px] font-bold text-outline uppercase tracking-widest pl-1">Count 20s</label>
+<input class="w-full bg-surface-container-low border-0 rounded-xl focus:ring-2 focus:ring-primary text-sm p-3" placeholder="0" type="number"/>
+</div>
+<div class="space-y-1">
+<label class="text-[10px] font-bold text-outline uppercase tracking-widest pl-1">Other/Coins</label>
+<input class="w-full bg-surface-container-low border-0 rounded-xl focus:ring-2 focus:ring-primary text-sm p-3" placeholder="0.00" type="number"/>
+</div>
+</div>
+<div class="mt-4 p-4 bg-surface-container-high rounded-xl flex justify-between items-center">
+<span class="text-sm font-semibold text-on-surface-variant">Manual Total Counted</span>
+<span class="text-xl font-headline font-black text-on-surface">$4,360.00</span>
+</div>
+</section>
+<!-- Section: System Totals & Discrepancy -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="bg-surface-container-low p-5 rounded-xl">
+<h4 class="text-xs font-bold text-outline uppercase tracking-widest mb-4">System Totals</h4>
+<div class="space-y-3">
+<div class="flex justify-between text-sm">
+<span class="text-on-surface-variant">Expected Cash:</span>
+<span class="font-bold">$4,362.50</span>
+</div>
+<div class="flex justify-between text-sm">
+<span class="text-on-surface-variant">Expected Card:</span>
+<span class="font-bold">$8,120.00</span>
+</div>
+<div class="pt-2 border-t border-outline-variant/30 flex justify-between">
+<span class="text-sm font-bold">Total Sales:</span>
+<span class="text-sm font-black text-primary">$12,482.50</span>
+</div>
+</div>
+</div>
+<div class="p-5 rounded-xl bg-tertiary-container/10 border border-tertiary/20">
+<h4 class="text-xs font-bold text-tertiary uppercase tracking-widest mb-4">Discrepancy</h4>
+<div class="flex flex-col items-center justify-center py-2">
+<span class="text-3xl font-headline font-black text-tertiary">-$2.50</span>
+<span class="text-[10px] text-tertiary-fixed-dim font-bold uppercase mt-1">Shortfall Detected</span>
+</div>
+<div class="mt-3 flex items-center gap-2 text-[11px] text-tertiary font-medium">
+<span class="material-symbols-outlined text-[14px]">info</span>
+<span>Verify large bills or check for unrecorded small change.</span>
+</div>
+</div>
+</section>
+<!-- Section: Notes -->
+<section>
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-outline">description</span>
+<h3 class="font-headline font-bold text-lg text-on-surface">Notes</h3>
+</div>
+<textarea class="w-full bg-surface-container-low border-0 rounded-xl focus:ring-2 focus:ring-primary text-sm p-4 resize-none" placeholder="Reason for discrepancy or shift highlights..." rows="3"></textarea>
+</section>
+</div>
+<!-- Modal Footer Actions -->
+<div class="px-8 py-6 bg-surface-container-low flex gap-4">
+<button class="flex-1 py-4 px-6 rounded-xl bg-surface-container-highest text-on-surface font-headline font-bold hover:bg-surface-variant transition-all active:scale-[0.98]">
+                    Cancel
+                </button>
+<button class="flex-[2] py-4 px-6 rounded-xl bg-gradient-to-br from-[#02645f] to-[#2d7d78] text-white font-headline font-bold shadow-lg hover:opacity-90 transition-all active:scale-[0.98] flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[20px]">lock</span>
+                    Finalize &amp; Lock Day
+                </button>
+</div>
+</div>
+</div>
+</body></html>

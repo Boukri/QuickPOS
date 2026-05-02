@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Daily Close Report - The Clinical Sanctuary</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#eceef0",
+                        "primary": "#02645f",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-primary-fixed-variant": "#00504c",
+                        "error-container": "#ffdad6",
+                        "tertiary-container": "#a26045",
+                        "primary-container": "#2d7d78",
+                        "on-tertiary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed": "#0d1c2e",
+                        "surface-dim": "#d8dadc",
+                        "secondary-fixed-dim": "#b9c7df",
+                        "on-tertiary-fixed-variant": "#6f371f",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-tertiary-fixed": "#370e00",
+                        "on-primary-container": "#d8fffb",
+                        "outline-variant": "#bec9c7",
+                        "on-primary-fixed": "#00201e",
+                        "tertiary-fixed-dim": "#ffb598",
+                        "tertiary-fixed": "#ffdbce",
+                        "error": "#ba1a1a",
+                        "surface-container-high": "#e6e8ea",
+                        "on-tertiary-container": "#fff4f1",
+                        "on-surface": "#191c1e",
+                        "surface": "#f7f9fb",
+                        "surface-container-lowest": "#ffffff",
+                        "background": "#f7f9fb",
+                        "surface-container-low": "#f2f4f6",
+                        "on-secondary-fixed-variant": "#3a485b",
+                        "on-secondary-container": "#57657a",
+                        "on-background": "#191c1e",
+                        "secondary": "#515f74",
+                        "inverse-primary": "#88d4ce",
+                        "secondary-fixed": "#d5e3fc",
+                        "surface-tint": "#106a65",
+                        "primary-fixed": "#a4f0ea",
+                        "tertiary": "#85482f",
+                        "surface-variant": "#e0e3e5",
+                        "secondary-container": "#d5e3fc",
+                        "outline": "#6f7978",
+                        "on-surface-variant": "#3f4948",
+                        "on-error-container": "#93000a",
+                        "surface-bright": "#f7f9fb",
+                        "primary-fixed-dim": "#88d4ce",
+                        "on-secondary": "#ffffff",
+                        "inverse-surface": "#2d3133"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-manrope { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-panel { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px); }
+        .primary-gradient { background: linear-gradient(135deg, #02645f 0%, #2d7d78 100%); }
+    </style>
+</head>
+<body class="bg-surface text-on-surface flex min-h-screen">
+<!-- SideNavBar Shell -->
+<aside class="fixed left-0 top-0 flex flex-col py-8 px-4 gap-6 bg-[#e6e8ea] h-screen w-72 rounded-r-[1.5rem] shadow-[24px_0_24px_rgba(25,28,30,0.06)] z-50 font-['Inter'] text-sm tracking-wide">
+<div class="flex items-center gap-3 px-4 mb-4">
+<div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined">spa</span>
+</div>
+<div>
+<h2 class="font-['Manrope'] font-black text-[#02645f]">Clinical Sanctuary</h2>
+<p class="text-xs text-slate-500 uppercase tracking-widest font-bold">Premium POS</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2 flex-grow">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-[#02645f] hover:bg-[#f2f4f6] transition-all duration-300 rounded-l-full" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-[#02645f] hover:bg-[#f2f4f6] transition-all duration-300 rounded-l-full" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+                Inventory
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-[#02645f] hover:bg-[#f2f4f6] transition-all duration-300 rounded-l-full" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+                Transactions
+            </a>
+<!-- Active Navigation -->
+<a class="flex items-center gap-3 px-4 py-3 bg-white text-[#02645f] font-bold rounded-l-full shadow-sm translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined">analytics</span>
+                Daily Close
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-[#02645f] hover:bg-[#f2f4f6] transition-all duration-300 rounded-l-full" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Settings
+            </a>
+</nav>
+<div class="flex flex-col gap-2 border-t border-outline-variant/20 pt-6">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-[#02645f] transition-all" href="#">
+<span class="material-symbols-outlined">contact_support</span>
+                Support
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-[#02645f] transition-all" href="#">
+<span class="material-symbols-outlined">logout</span>
+                Logout
+            </a>
+</div>
+</aside>
+<main class="flex-grow ml-72 relative">
+<!-- TopNavBar Shell -->
+<header class="fixed top-0 right-0 left-72 z-40 bg-[#f2f4f6] bg-opacity-90 backdrop-blur-md flex justify-between items-center px-8 h-20 no-border tonal-layering">
+<div class="flex items-center gap-4">
+<div class="bg-surface-container-highest px-4 py-2 rounded-full flex items-center gap-2">
+<span class="material-symbols-outlined text-outline">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm font-manrope font-semibold" placeholder="Search orders..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 text-slate-500">
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">notifications</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">settings</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">help</span>
+</div>
+<div class="flex items-center gap-3 pl-6 border-l border-outline-variant/30">
+<div class="text-right">
+<p class="text-sm font-manrope font-semibold text-primary">Manager Access</p>
+<p class="text-xs text-slate-400">Shift A - Terminal 04</p>
+</div>
+<img alt="Manager Avatar" class="w-10 h-10 rounded-full object-cover" data-alt="professional portrait of a confident spa manager with a friendly expression in a modern clinic setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5LvGoGwRrEiWpSZYumBV42Clbyd4i-QkBlmHP890X5KvWQvAwj_4KWe6xa2jkoHFHkgk73ghAYStoso7zo1gguxwCNxpMeiyh7Yf4pfsJxXz2ci3mlSp4Js0jS1Y1xqcD1-FiLkCVObT-NHdivaEyD4eSmNWxYXmKTPw0tVKVXqXk_f3_Ace-ainCCzEiES32rJfjiZpcHWOVM6b5lsvBV3cVxs7GSszPPJmdblQNOK_o87rTlENsOcgfdGBdNQ1-1LeLbN_I3lk"/>
+</div>
+</div>
+</header>
+<!-- Content Canvas -->
+<div class="pt-28 px-8 pb-12">
+<!-- Header Section -->
+<div class="flex justify-between items-end mb-10">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase">Reporting</span>
+<div class="flex items-center gap-1.5 text-tertiary font-bold">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="text-xs uppercase tracking-tighter">Status: Open</span>
+</div>
+</div>
+<h1 class="text-4xl font-headline font-extrabold text-on-surface tracking-tight">Daily Close Report</h1>
+<p class="text-on-surface-variant font-medium mt-1">October 24, 2023 • Tuesday Summary</p>
+</div>
+<button class="primary-gradient text-on-primary px-6 py-4 rounded-xl font-headline font-bold flex items-center gap-2 shadow-lg shadow-primary/20 hover:scale-105 transition-transform">
+<span class="material-symbols-outlined">print</span>
+                    Print Full Report
+                </button>
+</div>
+<!-- Bento Summary Grid -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+<div class="bg-surface-container-lowest p-6 rounded-2xl shadow-sm border border-outline-variant/5">
+<p class="text-label-sm font-label uppercase tracking-widest text-on-surface-variant mb-4">Total Sales</p>
+<h2 class="text-3xl font-headline font-extrabold text-primary">$1,248.50</h2>
+<div class="mt-4 flex items-center gap-2">
+<span class="text-primary text-xs font-bold bg-primary/10 px-2 py-0.5 rounded-full">+12.5%</span>
+<span class="text-on-surface-variant text-xs">vs yesterday</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-2xl shadow-sm border border-outline-variant/5">
+<p class="text-label-sm font-label uppercase tracking-widest text-on-surface-variant mb-4">Net Profit</p>
+<h2 class="text-3xl font-headline font-extrabold text-on-surface">$912.20</h2>
+<div class="mt-4 flex items-center gap-2 text-on-surface-variant text-xs">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span>Margin: 73%</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-2xl shadow-sm border border-outline-variant/5">
+<p class="text-label-sm font-label uppercase tracking-widest text-on-surface-variant mb-4">Transactions</p>
+<h2 class="text-3xl font-headline font-extrabold text-on-surface">42</h2>
+<div class="mt-4 flex items-center gap-2 text-on-surface-variant text-xs">
+<span class="material-symbols-outlined text-sm">person</span>
+<span>8 New Clients</span>
+</div>
+</div>
+<div class="bg-tertiary-fixed text-on-tertiary-fixed p-6 rounded-2xl shadow-sm relative overflow-hidden">
+<div class="relative z-10">
+<p class="text-label-sm font-label uppercase tracking-widest opacity-80 mb-4">Avg Ticket</p>
+<h2 class="text-3xl font-headline font-extrabold">$29.72</h2>
+<div class="mt-4 flex items-center gap-2 text-xs font-semibold">
+<span class="material-symbols-outlined text-sm">bolt</span>
+<span>Peak Hour: 14:00</span>
+</div>
+</div>
+<span class="material-symbols-outlined absolute -right-4 -bottom-4 text-8xl opacity-10 rotate-12">confirmation_number</span>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Payment Breakdown -->
+<div class="lg:col-span-1 bg-surface-container-low rounded-2xl p-8 flex flex-col gap-8">
+<div>
+<h3 class="text-xl font-headline font-bold text-on-surface mb-2">Payment Breakdown</h3>
+<p class="text-on-surface-variant text-sm">Settlement by method type</p>
+</div>
+<div class="space-y-6">
+<div class="space-y-2">
+<div class="flex justify-between items-end">
+<span class="font-headline font-bold text-on-surface">Credit Card</span>
+<span class="font-manrope font-extrabold text-primary">$890.00</span>
+</div>
+<div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 71%"></div>
+</div>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">71% of total</p>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between items-end">
+<span class="font-headline font-bold text-on-surface">Cash</span>
+<span class="font-manrope font-extrabold text-on-surface">$258.50</span>
+</div>
+<div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary-container rounded-full" style="width: 21%"></div>
+</div>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">21% of total</p>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between items-end">
+<span class="font-headline font-bold text-on-surface">Loyalty Points</span>
+<span class="font-manrope font-extrabold text-tertiary">$100.00</span>
+</div>
+<div class="h-2 w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-tertiary-container rounded-full" style="width: 8%"></div>
+</div>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-widest font-bold">8% of total redemption</p>
+</div>
+</div>
+<div class="mt-auto p-4 bg-surface-container-lowest rounded-xl border border-outline-variant/10">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-700">
+<span class="material-symbols-outlined">check_circle</span>
+</div>
+<div>
+<p class="text-xs font-bold text-on-surface">Vault Reconciled</p>
+<p class="text-[10px] text-on-surface-variant">Confirmed by Manager 18:32</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Transaction Ledger -->
+<div class="lg:col-span-2">
+<div class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm">
+<div class="p-6 border-b border-surface-container flex justify-between items-center">
+<h3 class="text-xl font-headline font-bold text-on-surface">Recent Transactions</h3>
+<button class="text-primary font-bold text-sm flex items-center gap-1 hover:underline">
+                                View All
+                                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low">
+<tr>
+<th class="px-6 py-4 text-[10px] uppercase tracking-[0.1em] font-bold text-outline">Time</th>
+<th class="px-6 py-4 text-[10px] uppercase tracking-[0.1em] font-bold text-outline">Client</th>
+<th class="px-6 py-4 text-[10px] uppercase tracking-[0.1em] font-bold text-outline">Items</th>
+<th class="px-6 py-4 text-[10px] uppercase tracking-[0.1em] font-bold text-outline">Method</th>
+<th class="px-6 py-4 text-[10px] uppercase tracking-[0.1em] font-bold text-outline text-right">Total</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container">
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="px-6 py-4 text-sm font-medium text-on-surface-variant">16:42</td>
+<td class="px-6 py-4">
+<p class="text-sm font-bold text-on-surface">Elena Rodriguez</p>
+<p class="text-[10px] text-outline">Member #4421</p>
+</td>
+<td class="px-6 py-4 text-sm text-on-surface-variant">Hyaluronic Serum (2)</td>
+<td class="px-6 py-4">
+<span class="flex items-center gap-1.5 text-xs font-semibold text-on-surface-variant">
+<span class="material-symbols-outlined text-base">credit_card</span> Visa
+                                            </span>
+</td>
+<td class="px-6 py-4 text-right font-manrope font-bold text-on-surface">$184.00</td>
+</tr>
+<tr class="bg-surface-container-low/20 hover:bg-surface-container-low/50 transition-colors">
+<td class="px-6 py-4 text-sm font-medium text-on-surface-variant">16:15</td>
+<td class="px-6 py-4">
+<p class="text-sm font-bold text-on-surface">James T. Sterling</p>
+<p class="text-[10px] text-outline">Guest</p>
+</td>
+<td class="px-6 py-4 text-sm text-on-surface-variant">Facial Sculpting Kit</td>
+<td class="px-6 py-4">
+<span class="flex items-center gap-1.5 text-xs font-semibold text-on-surface-variant">
+<span class="material-symbols-outlined text-base">payments</span> Cash
+                                            </span>
+</td>
+<td class="px-6 py-4 text-right font-manrope font-bold text-on-surface">$55.20</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="px-6 py-4 text-sm font-medium text-on-surface-variant">15:50</td>
+<td class="px-6 py-4">
+<p class="text-sm font-bold text-on-surface">Sarah Chen</p>
+<p class="text-[10px] text-outline">Member #8902</p>
+</td>
+<td class="px-6 py-4 text-sm text-on-surface-variant">Retinol Night Cream</td>
+<td class="px-6 py-4">
+<span class="flex items-center gap-1.5 text-xs font-semibold text-tertiary">
+<span class="material-symbols-outlined text-base">star</span> Points
+                                            </span>
+</td>
+<td class="px-6 py-4 text-right font-manrope font-bold text-on-surface">$120.00</td>
+</tr>
+<tr class="bg-surface-container-low/20 hover:bg-surface-container-low/50 transition-colors">
+<td class="px-6 py-4 text-sm font-medium text-on-surface-variant">15:22</td>
+<td class="px-6 py-4">
+<p class="text-sm font-bold text-on-surface">Marcus Thorne</p>
+<p class="text-[10px] text-outline">Member #1105</p>
+</td>
+<td class="px-6 py-4 text-sm text-on-surface-variant">Mineral Sunscreen SPF 50</td>
+<td class="px-6 py-4">
+<span class="flex items-center gap-1.5 text-xs font-semibold text-on-surface-variant">
+<span class="material-symbols-outlined text-base">credit_card</span> Amex
+                                            </span>
+</td>
+<td class="px-6 py-4 text-right font-manrope font-bold text-on-surface">$42.50</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="px-6 py-4 text-sm font-medium text-on-surface-variant">14:40</td>
+<td class="px-6 py-4">
+<p class="text-sm font-bold text-on-surface">Lydia Vance</p>
+<p class="text-[10px] text-outline">Guest</p>
+</td>
+<td class="px-6 py-4 text-sm text-on-surface-variant">Detox Clay Mask (3)</td>
+<td class="px-6 py-4">
+<span class="flex items-center gap-1.5 text-xs font-semibold text-on-surface-variant">
+<span class="material-symbols-outlined text-base">credit_card</span> Visa
+                                            </span>
+</td>
+<td class="px-6 py-4 text-right font-manrope font-bold text-on-surface">$115.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Action Zone -->
+<div class="mt-12 bg-primary-container/10 p-8 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6 border border-primary/5">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined">lock_open</span>
+</div>
+<div>
+<h4 class="font-headline font-bold text-primary">Ready to initiate Daily Close?</h4>
+<p class="text-on-surface-variant text-sm">All terminals have synced and vault balance matches records.</p>
+</div>
+</div>
+<div class="flex gap-4">
+<button class="bg-surface-container-lowest text-on-surface px-6 py-3 rounded-xl font-bold border border-outline-variant/30 hover:bg-surface-container-high transition-colors">
+                        Re-sync Terminals
+                    </button>
+<button class="bg-primary text-on-primary px-8 py-3 rounded-xl font-bold shadow-lg shadow-primary/20 hover:bg-primary-container transition-colors">
+                        Finalize &amp; Close Day
+                    </button>
+</div>
+</div>
+</div>
+</main>
+</body></html>

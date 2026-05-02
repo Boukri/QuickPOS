@@ -1,0 +1,326 @@
+<UserControl x:Class="QuickPOS.Features.Users.UsersView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="800" d:DesignWidth="1100"
+             Background="{StaticResource SurfaceBrush}">
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="40">
+
+                <!--  Header -->
+                <DockPanel Margin="0,0,0,40">
+                    <StackPanel>
+                        <TextBlock Text="Staff Directory" FontFamily="Manrope, Segoe UI" FontSize="42"
+                                   FontWeight="ExtraBold" Foreground="{StaticResource OnSurfaceBrush}"
+                                   Margin="0,0,0,4"/>
+                        <TextBlock Text="Manage roles and permissions for your clinical team members."
+                                   FontFamily="Inter, Segoe UI" FontSize="14" FontWeight="Medium"
+                                   Foreground="{StaticResource OnSurfaceVariantBrush}"/>
+                    </StackPanel>
+                    <Button DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Top"
+                            Command="{Binding ShowAddFormCommand}"
+                            Style="{StaticResource PrimaryButtonStyle}" Height="56" Padding="32,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="??" FontSize="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Invite New User" FontWeight="Bold" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </DockPanel>
+
+                <!--  Stats Bento -->
+                <Grid Margin="0,0,0,40">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="24"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="24"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Total Staff -->
+                    <Border Grid.Column="0" Background="{StaticResource SurfaceLowestBrush}" CornerRadius="12"
+                            Padding="32" MinHeight="176">
+                        <DockPanel>
+                            <DockPanel DockPanel.Dock="Top">
+                                <TextBlock FontFamily="Inter, Segoe UI" FontSize="11" FontWeight="ExtraBold"
+                                           Foreground="{StaticResource OnSurfaceVariantBrush}" Text="TOTAL STAFF"/>
+                                <Border DockPanel.Dock="Right" HorizontalAlignment="Right"
+                                        Padding="8" CornerRadius="8">
+                                    <Border.Background>
+                                        <SolidColorBrush Color="{StaticResource PrimaryColor}" Opacity="0.1"/>
+                                    </Border.Background>
+                                    <TextBlock Text="??" FontSize="18" HorizontalAlignment="Center"/>
+                                </Border>
+                            </DockPanel>
+                            <DockPanel VerticalAlignment="Bottom">
+                                <TextBlock FontFamily="Manrope, Segoe UI" FontSize="42" FontWeight="ExtraBold"
+                                           Foreground="{StaticResource PrimaryDarkBrush}"
+                                           Text="{Binding Users.Count}"/>
+                                <Border DockPanel.Dock="Right" HorizontalAlignment="Right"
+                                        Background="{StaticResource PrimaryFixedBrush}" CornerRadius="12"
+                                        Padding="12,4" VerticalAlignment="Bottom">
+                                    <TextBlock FontFamily="Inter, Segoe UI" FontSize="12" FontWeight="Bold"
+                                               Foreground="{StaticResource PrimaryDarkBrush}" Text="+2 this month"/>
+                                </Border>
+                            </DockPanel>
+                        </DockPanel>
+                    </Border>
+
+                    <!-- Active Shifts -->
+                    <Border Grid.Column="2" Background="{StaticResource SurfaceLowestBrush}" CornerRadius="12"
+                            Padding="32" MinHeight="176">
+                        <DockPanel>
+                            <DockPanel DockPanel.Dock="Top">
+                                <TextBlock FontFamily="Inter, Segoe UI" FontSize="11" FontWeight="ExtraBold"
+                                           Foreground="{StaticResource OnSurfaceVariantBrush}" Text="ACTIVE NOW"/>
+                                <Border DockPanel.Dock="Right" HorizontalAlignment="Right"
+                                        Padding="8" CornerRadius="8" Background="#10515F74">
+                                    <TextBlock Text="??" FontSize="18"/>
+                                </Border>
+                            </DockPanel>
+                            <DockPanel VerticalAlignment="Bottom">
+                                <TextBlock FontFamily="Manrope, Segoe UI" FontSize="42" FontWeight="ExtraBold"
+                                           Foreground="#515F74" Text="08"/>
+                                <Border DockPanel.Dock="Right" HorizontalAlignment="Right"
+                                        Background="#D5E3FC" CornerRadius="12" Padding="12,4"
+                                        VerticalAlignment="Bottom">
+                                    <TextBlock FontFamily="Inter, Segoe UI" FontSize="12" FontWeight="Bold"
+                                               Foreground="#57657A" Text="On Floor Now"/>
+                                </Border>
+                            </DockPanel>
+                        </DockPanel>
+                    </Border>
+
+                    <!-- Pending Invites -->
+                    <Border Grid.Column="4" CornerRadius="12" Padding="32" MinHeight="176"
+                            BorderBrush="{StaticResource TertiaryBrush}" BorderThickness="0,0,0,4">
+                        <Border.Background>
+                            <SolidColorBrush Color="{StaticResource TertiaryContainerColor}" Opacity="0.1"/>
+                        </Border.Background>
+                        <DockPanel>
+                            <DockPanel DockPanel.Dock="Top">
+                                <TextBlock FontFamily="Inter, Segoe UI" FontSize="11" FontWeight="ExtraBold"
+                                           Foreground="{StaticResource TertiaryBrush}" Text="PENDING INVITES"/>
+                                <Border DockPanel.Dock="Right" HorizontalAlignment="Right"
+                                        Padding="8" CornerRadius="8">
+                                    <Border.Background>
+                                        <SolidColorBrush Color="{StaticResource TertiaryColor}" Opacity="0.1"/>
+                                    </Border.Background>
+                                    <TextBlock Text="??" FontSize="18"/>
+                                </Border>
+                            </DockPanel>
+                            <DockPanel VerticalAlignment="Bottom">
+                                <TextBlock FontFamily="Manrope, Segoe UI" FontSize="42" FontWeight="ExtraBold"
+                                           Foreground="{StaticResource TertiaryBrush}" Text="03"/>
+                                <Border DockPanel.Dock="Right" HorizontalAlignment="Right"
+                                        Background="{StaticResource TertiaryContainerBrush}" CornerRadius="12"
+                                        Padding="12,4" VerticalAlignment="Bottom">
+                                    <TextBlock FontFamily="Inter, Segoe UI" FontSize="12" FontWeight="Bold"
+                                               Foreground="White" Text="Awaiting Response"/>
+                                </Border>
+                            </DockPanel>
+                        </DockPanel>
+                    </Border>
+                </Grid>
+
+                <!--  Staff Table -->
+                <Border Background="{StaticResource SurfaceLowBrush}" CornerRadius="12">
+                    <DockPanel>
+                        <!-- Table Header Bar -->
+                        <Border DockPanel.Dock="Top" Background="White" Padding="32,20" CornerRadius="12,12,0,0">
+                            <DockPanel>
+                                <TextBlock Text="Team Members" FontFamily="Manrope, Segoe UI" FontSize="18"
+                                           FontWeight="Bold" Foreground="#0F766E" VerticalAlignment="Center"/>
+                                <StackPanel DockPanel.Dock="Right" HorizontalAlignment="Right"
+                                            Orientation="Horizontal">
+                                    <Button Content="?? Filter" Style="{StaticResource LinkButtonStyle}"
+                                            Foreground="{StaticResource OnSurfaceVariantBrush}" Margin="0,0,16,0"/>
+                                    <Button Content="? Sort" Style="{StaticResource LinkButtonStyle}"
+                                            Foreground="{StaticResource OnSurfaceVariantBrush}"/>
+                                </StackPanel>
+                            </DockPanel>
+                        </Border>
+
+                        <!-- Table Footer -->
+                        <Border DockPanel.Dock="Bottom" Background="White" Padding="32,20"
+                                BorderBrush="{StaticResource SurfaceContainerBrush}" BorderThickness="0,1,0,0"
+                                CornerRadius="0,0,12,12">
+                            <DockPanel>
+                                <TextBlock FontFamily="Inter, Segoe UI" FontSize="12" FontStyle="Italic"
+                                           Foreground="{StaticResource OnSurfaceVariantBrush}"
+                                           VerticalAlignment="Center">
+                                    <Run Text="Showing"/>
+                                    <Run Text="{Binding Users.Count, Mode=OneWay}"/>
+                                    <Run Text="staff members"/>
+                                </TextBlock>
+                            </DockPanel>
+                        </Border>
+
+                        <!-- Table Content -->
+                        <ItemsControl ItemsSource="{Binding Users}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="32,20" Background="White" Margin="0,0,0,1">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="#F8FAFC"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <!-- Avatar + Name -->
+                                            <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="0,0,32,0">
+                                                <Border Width="48" Height="48" CornerRadius="24"
+                                                        Background="#E0F2F1" Margin="0,0,16,0">
+                                                    <TextBlock Text="{Binding Initials}" FontFamily="Manrope, Segoe UI"
+                                                               FontWeight="Bold" FontSize="15"
+                                                               Foreground="{StaticResource PrimaryDarkBrush}"
+                                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                                <StackPanel VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding FullName}" FontFamily="Manrope, Segoe UI"
+                                                               FontWeight="Bold" FontSize="14"
+                                                               Foreground="{StaticResource OnSurfaceBrush}"/>
+                                                    <TextBlock Text="{Binding Email}" FontFamily="Inter, Segoe UI" FontSize="12"
+                                                               Foreground="{StaticResource OnSurfaceVariantBrush}"
+                                                               Margin="0,2,0,0"/>
+                                                </StackPanel>
+                                            </StackPanel>
+
+                                            <!-- Contact (fills space) -->
+                                            <StackPanel Grid.Column="1" VerticalAlignment="Center"/>
+
+                                            <!-- Role Badge -->
+                                            <Border Grid.Column="2" CornerRadius="12" Padding="12,4"
+                                                    VerticalAlignment="Center" Margin="0,0,16,0">
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="Background" Value="{StaticResource SurfaceHighBrush}"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Role}" Value="Admin">
+                                                                <Setter Property="Background" Value="#D5E3FC"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Role}" Value="Manager">
+                                                                <Setter Property="Background" Value="#10024F5F"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                                <TextBlock Text="{Binding Role}" FontFamily="Inter, Segoe UI" FontSize="10"
+                                                           FontWeight="ExtraBold"
+                                                           TextAlignment="Center">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="Foreground" Value="{StaticResource OnSurfaceVariantBrush}"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Role}" Value="Admin">
+                                                                    <Setter Property="Foreground" Value="#57657A"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding Role}" Value="Manager">
+                                                                    <Setter Property="Foreground" Value="{StaticResource PrimaryDarkBrush}"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                                <Border.ToolTip>
+                                                    <ToolTip MaxWidth="280">
+                                                        <StackPanel>
+                                                            <TextBlock Text="{Binding Role, StringFormat='{}{0} Permissions'}"
+                                                                       FontFamily="Manrope, Segoe UI" FontWeight="Bold" FontSize="13" Margin="0,0,0,4"/>
+                                                            <TextBlock Text="{Binding RoleDescription}" FontFamily="Inter, Segoe UI"
+                                                                       FontSize="12" TextWrapping="Wrap" Foreground="#64748B"/>
+                                                        </StackPanel>
+                                                    </ToolTip>
+                                                </Border.ToolTip>
+                                            </Border>
+
+                                            <!-- Status -->
+                                            <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center"
+                                                        Margin="0,0,16,0">
+                                                <Ellipse Width="8" Height="8" Margin="0,0,8,0">
+                                                    <Ellipse.Style>
+                                                        <Style TargetType="Ellipse">
+                                                            <Setter Property="Fill" Value="#CBD5E1"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Status}" Value="Active">
+                                                                    <Setter Property="Fill" Value="{StaticResource PrimaryDarkBrush}"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Ellipse.Style>
+                                                </Ellipse>
+                                                <TextBlock Text="{Binding Status}" FontFamily="Inter, Segoe UI" FontSize="13"
+                                                           FontWeight="Medium" Foreground="{StaticResource OnSurfaceVariantBrush}"/>
+                                            </StackPanel>
+
+                                            <!-- Actions -->
+                                            <StackPanel Grid.Column="4" Orientation="Horizontal" VerticalAlignment="Center">
+                                                <Button Content="?" Style="{StaticResource TableEditButtonStyle}"
+                                                        Command="{Binding DataContext.EditUserCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                        CommandParameter="{Binding}"/>
+                                                <Button Content="??" Style="{StaticResource TableEditButtonStyle}"
+                                                        Command="{Binding DataContext.DeleteUserCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                        CommandParameter="{Binding}" Margin="4,0,0,0"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </DockPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!--  Add/Edit Form Modal -->
+        <Border Background="#80000000"
+                Visibility="{Binding IsFormVisible, Converter={StaticResource BoolToVisConverter}}">
+            <Border Background="White" CornerRadius="16" Width="440" VerticalAlignment="Center"
+                    HorizontalAlignment="Center" Padding="32">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="40" Opacity="0.15" ShadowDepth="0"/>
+                </Border.Effect>
+                <StackPanel>
+                    <TextBlock Text="User Details" FontFamily="Manrope, Segoe UI" FontSize="22" FontWeight="ExtraBold"
+                               Foreground="{StaticResource OnSurfaceBrush}" Margin="0,0,0,24"/>
+
+                    <TextBlock Text="FULL NAME" Style="{StaticResource FormLabelStyle}"/>
+                    <TextBox Text="{Binding FormFullName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FormInputStyle}"/>
+
+                    <TextBlock Text="EMAIL" Style="{StaticResource FormLabelStyle}"/>
+                    <TextBox Text="{Binding FormEmail, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FormInputStyle}"/>
+
+                    <TextBlock Text="ROLE" Style="{StaticResource FormLabelStyle}"/>
+                    <ComboBox ItemsSource="{Binding Roles}" SelectedItem="{Binding FormRole}"
+                              Style="{StaticResource FormComboStyle}"/>
+
+                    <TextBlock Text="STATUS" Style="{StaticResource FormLabelStyle}"/>
+                    <ComboBox ItemsSource="{Binding Statuses}" SelectedItem="{Binding FormStatus}"
+                              Style="{StaticResource FormComboStyle}"/>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+                        <Button Content="Cancel" Command="{Binding CancelFormCommand}"
+                                Style="{StaticResource SecondaryButtonStyle}" Width="120" Height="44" Margin="0,0,12,0"/>
+                        <Button Content="Save" Command="{Binding SaveUserCommand}"
+                                Style="{StaticResource PrimaryButtonStyle}" Width="120" Height="44"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Border>
+    </Grid>
+</UserControl>

@@ -1,0 +1,430 @@
+<UserControl x:Class="QuickPOS.Features.Selling.SellingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:materialIcons="clr-namespace:Material.Icons.WPF;assembly=Material.Icons.WPF" xmlns:fa="https://dsaladin.dev/products/fontawesome/wpf/xaml"
+             mc:Ignorable="d"
+             d:DesignHeight="800" d:DesignWidth="1200"
+             Background="{StaticResource SurfaceLowBrush}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" MinWidth="300"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition x:Name="CartColumn" Width="{Binding CartPanelWidth, Mode=TwoWay}" MinWidth="280" MaxWidth="650"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- ====== Product Grid Area ====== -->
+        <DockPanel Grid.Column="0" Margin="32,10,10,10">
+            <!-- Header + Category Tabs -->
+            <DockPanel DockPanel.Dock="Top" Margin="0,0,0,32">
+
+                <!-- Category filter pills -->
+                <Border  VerticalAlignment="Top"
+                        Background="{StaticResource SurfaceHighBrush}" CornerRadius="12" Padding="4">
+                    <ListBox ItemsSource="{Binding Categories}"
+                             SelectedItem="{Binding SelectedCategory}"
+                             DisplayMemberPath="Name"
+                             BorderThickness="0" Background="Transparent">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="FontFamily" Value="Manrope"/>
+                                <Setter Property="FontSize" Value="13"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                <Setter Property="Foreground" Value="{StaticResource OnSurfaceVariantBrush}"/>
+                                <Setter Property="Cursor" Value="Hand"/>
+                                <Setter Property="Margin" Value="0"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ListBoxItem">
+                                            <Border x:Name="pill" Background="Transparent" CornerRadius="8"
+                                                    Padding="24,8">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsSelected" Value="True">
+                                                    <Setter TargetName="pill" Property="Background" Value="{StaticResource SurfaceLowestBrush}"/>
+                                                    <Setter Property="Foreground" Value="{StaticResource PrimaryDarkBrush}"/>
+                                                    <Setter Property="FontWeight" Value="Bold"/>
+                                                </Trigger>
+                                                <MultiTrigger>
+                                                    <MultiTrigger.Conditions>
+                                                        <Condition Property="IsMouseOver" Value="True"/>
+                                                        <Condition Property="IsSelected" Value="False"/>
+                                                    </MultiTrigger.Conditions>
+                                                    <Setter TargetName="pill" Property="Background" Value="#30FFFFFF"/>
+                                                </MultiTrigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
+                </Border>
+            </DockPanel>
+
+            <!-- Product Cards Grid (Bento) -->
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="0,0,8,0">
+                <ItemsControl ItemsSource="{Binding Products}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Command="{Binding DataContext.AddToCartCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    CommandParameter="{Binding}"
+                                    Style="{StaticResource ProductCardStyle}"
+                                    Margin="0,0,16,16">
+                                <!-- Outer Grid allows badge + overlay to float over the card -->
+                                <Grid>
+                                    <Border CornerRadius="12" Width="150" Height="220" Padding="16">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Setter Property="Background" Value="{StaticResource SurfaceLowestBrush}"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsOutOfStock}" Value="True">
+                                                        <Setter Property="Background" Value="{StaticResource SurfaceLowBrush}"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+                                            <!-- Image / placeholder -->
+                                            <Border Grid.Row="0" Background="{StaticResource SurfaceHighestBrush}"
+                                                    CornerRadius="12" Width="100" Height="100" Margin="0,0,0,10" ClipToBounds="True">
+                                                <Grid>
+                                                    <TextBlock FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="TextBlock">
+                                                                <Setter Property="Text" Value="&#x1F4E6;"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsService}" Value="True">
+                                                                        <Setter Property="Text" Value="&#x1F486;"/>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding ImagePath, Converter={StaticResource NullToBoolConverter}}" Value="True">
+                                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+                                                    <Image Stretch="UniformToFill"
+                                                           Source="{Binding ImagePath}"
+                                                           RenderOptions.BitmapScalingMode="HighQuality"
+                                                           Visibility="{Binding ImagePath, Converter={StaticResource StringToVisConverter}}"/>
+                                                </Grid>
+                                            </Border>
+                                            <!-- Category + Name -->
+                                            <TextBlock Grid.Row="1" FontSize="12" TextWrapping="Wrap" Margin="0,0,0,6">
+                                                <Run Text="{Binding Category.Name, Mode=OneWay}"
+                                                     FontFamily="Inter, Segoe UI"
+                                                     Foreground="{StaticResource OnSurfaceVariantBrush}"/>
+                                                <Run Text=" "/>
+                                                <Run Text="{Binding Name, Mode=OneWay}"
+                                                     FontFamily="Manrope, Segoe UI"
+                                                     FontWeight="Bold"
+                                                     Foreground="{StaticResource OnSurfaceBrush}"/>
+                                            </TextBlock>
+                                            <!-- Retail price -->
+                                            <TextBlock Grid.Row="2" HorizontalAlignment="Center"
+                                                       FontFamily="Manrope, Segoe UI" FontSize="18" FontWeight="ExtraBold"
+                                                       Foreground="{StaticResource PrimaryDarkBrush}"
+                                                       Text="{Binding RetailPrice, StringFormat={}{0:C}}"/>
+                                            <!-- Unit cost (FIFO/LIFO/WAC): hidden for services or when cost is 0 -->
+                                            <TextBlock Grid.Row="3" HorizontalAlignment="Center"
+                                                       FontFamily="Inter, Segoe UI" FontSize="10" FontWeight="Bold"
+                                                       Foreground="{StaticResource OutlineBrush}"
+                                                       Text="{Binding CurrentUnitCost, StringFormat=cost {0:C}}"
+                                                       Margin="0,2,0,0">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsService}" Value="True">
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding CurrentUnitCost}" Value="0">
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </Grid>
+                                    </Border>
+
+                                    <!-- Stock badge (top-right corner): hidden for service items -->
+                                    <Border HorizontalAlignment="Right" VerticalAlignment="Top"
+                                            CornerRadius="10" Padding="7,3"
+                                            Margin="0,6,6,0"
+                                            Visibility="{Binding IsService, Converter={StaticResource InverseBoolToVisConverter}}">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Setter Property="Background" Value="#22C55E"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsLowStock}" Value="True">
+                                                        <Setter Property="Background" Value="#F97316"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding IsOutOfStock}" Value="True">
+                                                        <Setter Property="Background" Value="{StaticResource ErrorBrush}"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <TextBlock FontFamily="Inter, Segoe UI" FontSize="10" FontWeight="ExtraBold"
+                                                   Foreground="White">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Text" Value="{Binding UnitsAvailable, StringFormat={}{0} left}"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsOutOfStock}" Value="True">
+                                                            <Setter Property="Text" Value="OUT"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </Border>
+
+                                    <!-- Out-of-stock overlay -->
+                                    <Border CornerRadius="12" Width="150" Height="220"
+                                            Background="#80191C1E"
+                                            Visibility="{Binding IsOutOfStock, Converter={StaticResource BoolToVisConverter}}">
+                                        <TextBlock Text="OUT OF STOCK"
+                                                   FontFamily="Inter, Segoe UI" FontSize="11" FontWeight="ExtraBold"
+                                                   Foreground="White"
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                   TextWrapping="Wrap" TextAlignment="Center"/>
+                                    </Border>
+                                </Grid>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </DockPanel>
+
+        <!-- ====== Drag Splitter ====== -->
+        <GridSplitter Grid.Column="1" Width="24" HorizontalAlignment="Center"
+                      VerticalAlignment="Stretch" Background="Transparent"
+                      Cursor="SizeWE" ResizeBehavior="PreviousAndNext"
+                      ResizeDirection="Columns" Focusable="False">
+            <GridSplitter.Template>
+                <ControlTemplate TargetType="GridSplitter">
+                    <Border x:Name="root" Background="Transparent" Width="24" Cursor="SizeWE">
+                        <!-- Visible grip bar with icon -->
+                        <Border x:Name="track" Width="6" CornerRadius="3"
+                                VerticalAlignment="Stretch" HorizontalAlignment="Center"
+                                Opacity="0.4">
+                            <Border.Background>
+                                <SolidColorBrush Color="{StaticResource OutlineVariantColor}"/>
+                            </Border.Background>
+                            <!-- Material Icon: DragHandle / DragVertical -->
+                            <materialIcons:MaterialIcon x:Name="icon" 
+                                                        Kind="DragVertical" 
+                                                        Width="20" Height="20"
+                                                        VerticalAlignment="Center"
+                                                        HorizontalAlignment="Center">
+                                <materialIcons:MaterialIcon.Foreground>
+                                    <SolidColorBrush Color="{StaticResource OutlineColor}"/>
+                                </materialIcons:MaterialIcon.Foreground>
+                            </materialIcons:MaterialIcon>
+                        </Border>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="track" Property="Width" Value="8"/>
+                            <Setter TargetName="track" Property="Opacity" Value="1"/>
+                            <Setter TargetName="track" Property="Background">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="{StaticResource PrimaryContainerColor}"/>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter TargetName="icon" Property="Foreground">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="{StaticResource OnPrimaryContainerColor}"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsDragging" Value="True">
+                            <Setter TargetName="track" Property="Width" Value="8"/>
+                            <Setter TargetName="track" Property="Opacity" Value="1"/>
+                            <Setter TargetName="track" Property="Background">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="{StaticResource PrimaryColor}"/>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter TargetName="icon" Property="Foreground" Value="White"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </GridSplitter.Template>
+        </GridSplitter>
+
+        <!-- ====== Cart Sidebar (Glass Panel) ====== -->
+        <Border Grid.Column="2" Background="White">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="40" Opacity="0.08" ShadowDepth="0" Direction="180"
+                                  Color="{StaticResource OnSurfaceColor}"/>
+            </Border.Effect>
+            <DockPanel>
+
+                <!-- Checkout Section (Bottom) -->
+                <Border DockPanel.Dock="Bottom" Background="{StaticResource SurfaceLowBrush}" Padding="32,24">
+                    <StackPanel>
+                        <!-- Total -->
+                        <DockPanel Margin="0,8,0,0">
+                            <TextBlock Text="{Binding Loc.TotalPrice, Mode= OneWay}" FontFamily="Manrope, Segoe UI" FontSize="16"
+                                       FontWeight="Bold" Foreground="{StaticResource OnSurfaceBrush}"
+                                       VerticalAlignment="Bottom"/>
+                            <TextBlock DockPanel.Dock="Right" HorizontalAlignment="Right"
+                                       FontFamily="Manrope, Segoe UI" FontSize="30" FontWeight="ExtraBold"
+                                       Foreground="{StaticResource PrimaryDarkBrush}">
+                                <TextBlock.Text>
+                                    <Binding Path="Cart.TotalAmount" StringFormat="{}{0:C}"/>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </DockPanel>
+
+
+                        <Grid Margin="0,12,0,0">
+                            <Grid.ColumnDefinitions >
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="2*"/>
+                            </Grid.ColumnDefinitions>
+                            <!-- Action Buttons -->
+                            <Button Grid.Column="0" Style="{StaticResource SecondaryButtonStyle}"
+                                    Content="{Binding Loc.Clear, Mode=OneWay}" Command="{Binding Cart.ClearCartCommand}" Height="36"/>
+                            <!-- Pay Button -->
+                            <Button Grid.Column="2" Style="{StaticResource PrimaryButtonStyle}" Height="52" 
+                                    Command="{Binding CheckoutCommand}" FontSize="18">
+                                <StackPanel Orientation="Horizontal">
+                                    <fa:FontAwesomeImage Icon="RegularCreditCard" Foreground="{StaticResource SurfaceLowBrush}" Height="22" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{Binding Loc.Payment, Mode=OneWay}" FontWeight="ExtraBold" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                        </Grid>
+
+                    </StackPanel>
+                </Border>
+
+                <!-- Cart Items List -->
+                <ListView ItemsSource="{Binding Cart.Items}" BorderThickness="0" Background="Transparent"
+                          Margin="32,32,32,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Padding" Value="0"/>
+                            <Setter Property="Margin" Value="0,0,0,16"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListViewItem">
+                                        <ContentPresenter/>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="64"/>
+                                    <ColumnDefinition Width="16"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <!-- Thumbnail -->
+                                <Border Grid.Column="0" Width="64" Height="64" CornerRadius="8"
+                                        Background="{StaticResource SurfaceContainerBrush}" ClipToBounds="True">
+                                    <Grid>
+                                        <TextBlock Text="&#x1F4E6;" FontSize="24"
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding ImagePath, Converter={StaticResource NullToBoolConverter}}" Value="True">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                        <Image Stretch="UniformToFill"
+                                               Source="{Binding ImagePath}"
+                                               RenderOptions.BitmapScalingMode="HighQuality"
+                                               Visibility="{Binding ImagePath, Converter={StaticResource StringToVisConverter}}"/>
+                                    </Grid>
+                                </Border>
+                                <!-- Details -->
+                                <StackPanel Grid.Column="2">
+                                    <DockPanel>
+                                        <TextBlock Text="{Binding ProductName}" FontFamily="Inter, Segoe UI"
+                                                   FontWeight="Bold" FontSize="14"
+                                                   Foreground="{StaticResource OnSurfaceBrush}"/>
+                                        <TextBlock DockPanel.Dock="Right" HorizontalAlignment="Right"
+                                                   FontFamily="Inter, Segoe UI" FontWeight="Bold" FontSize="14"
+                                                   Foreground="{StaticResource PrimaryDarkBrush}">
+                                            <TextBlock.Text>
+                                                <Binding Path="Total" StringFormat="{}{0:C}"/>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </DockPanel>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <TextBlock FontFamily="Inter, Segoe UI" FontSize="12"
+                                               Foreground="{StaticResource OnSurfaceVariantBrush}" Margin="0,0,10,0" >
+                                            <TextBlock.Text>
+                                                <Binding Path="UnitPrice" StringFormat="{}{0:C}"/>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                        <TextBlock Text="{Binding DataContext.Loc.ItemPrice, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=OneWay}" FontFamily="Inter, Segoe UI" FontSize="12"  Foreground="{StaticResource OnSurfaceVariantBrush}"/>
+                                    </StackPanel>
+
+                                    <!-- Quantity controls -->
+                                    <DockPanel Margin="0,10,0,0">
+                                        <Border BorderBrush="{StaticResource SurfaceHighBrush}" BorderThickness="1"
+                                                CornerRadius="8">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Button Content="-" Width="32" Height="32" FontSize="14"
+                                                        Style="{StaticResource IconButtonStyle}"
+                                                        Command="{Binding DataContext.Cart.DecrementQuantityCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                        CommandParameter="{Binding}"/>
+                                                <TextBlock Text="{Binding Quantity}" Width="32" TextAlignment="Center"
+                                                           VerticalAlignment="Center" FontFamily="Inter, Segoe UI"
+                                                           FontWeight="Bold" FontSize="13"/>
+                                                <Button Content="+" Width="32" Height="32" FontSize="14"
+                                                        Style="{StaticResource IconButtonStyle}"
+                                                        Command="{Binding DataContext.Cart.IncrementQuantityCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                        CommandParameter="{Binding}"/>
+                                            </StackPanel>
+                                        </Border>
+                                        <Button DockPanel.Dock="Right" HorizontalAlignment="Right"
+                                                Content="&#x1F5D1;" FontSize="16"
+                                                Style="{StaticResource TableEditButtonStyle}"
+                                                Command="{Binding DataContext.Cart.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding}"/>
+                                    </DockPanel>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </DockPanel>
+        </Border>
+    </Grid>
+</UserControl>

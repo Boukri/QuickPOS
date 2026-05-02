@@ -1,0 +1,507 @@
+<UserControl x:Class="QuickPOS.Features.DailyClose.DailyCloseView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:System="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d"
+             d:DesignHeight="800" d:DesignWidth="1100"
+             Background="{StaticResource SurfaceBrush}">
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="32">
+
+                <!-- ??? Header ??? -->
+                <DockPanel Margin="0,0,0,32">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                            <Border Background="#1002645F" CornerRadius="12" Padding="12,4" Margin="0,0,12,0">
+                                <TextBlock Text="REPORTING" FontFamily="Inter, Segoe UI" FontSize="10" FontWeight="ExtraBold"
+                                           Foreground="{StaticResource PrimaryDarkBrush}"/>
+                            </Border>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Ellipse Width="8" Height="8" Fill="{StaticResource TertiaryBrush}" Margin="0,0,6,0"/>
+                                <TextBlock Text="STATUS: OPEN" FontFamily="Inter, Segoe UI" FontSize="10" FontWeight="ExtraBold"
+                                           Foreground="{StaticResource TertiaryBrush}"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <TextBlock Text="Daily Close Report" FontFamily="Manrope, Segoe UI" FontSize="36"
+                                   FontWeight="ExtraBold" Foreground="{StaticResource OnSurfaceBrush}"
+                                   Margin="0,0,0,4"/>
+                        <TextBlock FontFamily="Inter, Segoe UI" FontSize="14" FontWeight="Medium"
+                                   Foreground="{StaticResource OnSurfaceVariantBrush}">
+                            <Run Text="{Binding Source={x:Static System:DateTime.Today}, StringFormat='{}{0:MMMM dd, yyyy - dddd}', Mode=OneWay}"/>
+                            <Run Text=" Summary"/>
+                        </TextBlock>
+                    </StackPanel>
+                    <Button DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Top"
+                            Style="{StaticResource PrimaryButtonStyle}" Height="56" Padding="24,0"
+                            Command="{Binding ShowCashOutModalCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="???" FontSize="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="Print Full Report" FontWeight="Bold" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </DockPanel>
+
+                <!-- ??? Summary Bento Cards ??? -->
+                <Grid Margin="0,0,0,40">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="16"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="16"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="16"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Total Sales -->
+                    <Border Grid.Column="0" Background="{StaticResource SurfaceLowestBrush}" CornerRadius="16"
+                            Padding="24" BorderBrush="{StaticResource OutlineVariantBrush}" BorderThickness="0.5">
+                        <StackPanel>
+                            <TextBlock Text="TOTAL SALES" FontFamily="Inter, Segoe UI" FontSize="10" FontWeight="ExtraBold"
+                                       Foreground="{StaticResource OnSurfaceVariantBrush}" Margin="0,0,0,16"/>
+                            <TextBlock FontFamily="Manrope, Segoe UI" FontSize="28" FontWeight="ExtraBold"
+                                       Foreground="{StaticResource PrimaryDarkBrush}">
+                                <TextBlock.Text>
+                                    <Binding Path="SystemGrandTotal" StringFormat="${0:N2}"/>
+                                </TextBlock.Text>
+                            </TextBlock>
+                            <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                                <Border Background="#1002645F" CornerRadius="12" Padding="8,2" Margin="0,0,8,0">
+                                    <TextBlock Text="+12.5%" FontFamily="Inter, Segoe UI" FontSize="11" FontWeight="Bold"
+                                               Foreground="{StaticResource PrimaryDarkBrush}"/>
+                                </Border>
+                                <TextBlock Text="vs yesterday" FontFamily="Inter, Segoe UI" FontSize="11"
+                                           Foreground="{StaticResource OnSurfaceVariantBrush}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Cash -->
+                    <Border Grid.Column="2" Background="{StaticResource SurfaceLowestBrush}" CornerRadius="16"
+                            Padding="24" BorderBrush="{StaticResource OutlineVariantBrush}" BorderThickness="0.5">
+                        <StackPanel>
+                            <TextBlock Text="CASH" FontFamily="Inter, Segoe UI" FontSize="10" FontWeight="ExtraBold"
+                                       Foreground="{StaticResource OnSurfaceVariantBrush}" Margin="0,0,0,16"/>
+                            <TextBlock FontFamily="Manrope, Segoe UI" FontSize="28" FontWeight="ExtraBold"
+                                       Foreground="{StaticResource OnSurfaceBrush}">
+                                <TextBlock.Text>
+                                    <Binding Path="SystemCashTotal" StringFormat="${0:N2}"/>
+                                </TextBlock.Text>
+                            </TextBlock>
+                            <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                                <TextBlock Text="??" FontSize="11" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Manual reconcile" FontFamily="Inter, Segoe UI" FontSize="11"
+                                           Foreground="{StaticResource OnSurfaceVariantBrush}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Card -->
+                    <Border Grid.Column="4" Background="{StaticResource SurfaceLowestBrush}" CornerRadius="16"
+                            Padding="24" BorderBrush="{StaticResource OutlineVariantBrush}" BorderThickness="0.5">
+                        <StackPanel>
+                            <TextBlock Text="CARD" FontFamily="Inter, Segoe UI" FontSize="10" FontWeight="ExtraBold"
+                                       Foreground="{StaticResource OnSurfaceVariantBrush}" Margin="0,0,0,16"/>
+                            <TextBlock FontFamily="Manrope, Segoe UI" FontSize="28" FontWeight="ExtraBold"
+                                       Foreground="{StaticResource OnSurfaceBrush}">
+                                <TextBlock.Text>
+                                    <Binding Path="SystemCardTotal" StringFormat="${0:N2}"/>
+                                </TextBlock.Text>
+                            </TextBlock>
+                            <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                                <TextBlock Text="??" FontSize="11" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Auto-settled" FontFamily="Inter, Segoe UI" FontSize="11"
+                                           Foreground="{StaticResource OnSurfaceVariantBrush}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Avg Ticket (Themed) -->
+                    <Border Grid.Column="6" CornerRadius="16" Padding="24">
+                        <Border.Background>
+                            <SolidColorBrush Color="#FFDBCE"/>
+                        </Border.Background>
+                        <StackPanel>
+                            <TextBlock Text="AVG TICKET" FontFamily="Inter, Segoe UI" FontSize="10" FontWeight="ExtraBold"
+                                       Foreground="#6F371F" Opacity="0.8" Margin="0,0,0,16"/>
+                            <TextBlock FontFamily="Manrope, Segoe UI" FontSize="28" FontWeight="ExtraBold"
+                                       Foreground="#6F371F">
+                                <TextBlock.Text>
+                                    <Binding Path="SystemPointsTotal" StringFormat="${0:N2}"/>
+                                </TextBlock.Text>
+                            </TextBlock>
+                            <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                                <TextBlock Text="?" FontSize="11" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Points total" FontFamily="Inter, Segoe UI" FontSize="11"
+                                           FontWeight="SemiBold" Foreground="#6F371F"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <!-- ??? Payment Breakdown + Transactions ??? -->
+                <Grid Margin="0,0,0,40">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="24"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Payment Breakdown -->
+                    <Border Grid.Column="0" Background="{StaticResource SurfaceLowBrush}" CornerRadius="16"
+                            Padding="32">
+                        <DockPanel>
+                            <StackPanel DockPanel.Dock="Top" Margin="0,0,0,32">
+                                <TextBlock Text="Payment Breakdown" FontFamily="Manrope, Segoe UI" FontSize="20"
+                                           FontWeight="Bold" Foreground="{StaticResource OnSurfaceBrush}"
+                                           Margin="0,0,0,4"/>
+                                <TextBlock Text="Settlement by method type" FontFamily="Inter, Segoe UI" FontSize="13"
+                                           Foreground="{StaticResource OnSurfaceVariantBrush}"/>
+                            </StackPanel>
+
+                            <!-- Reconciled Status at bottom -->
+                            <Border DockPanel.Dock="Bottom" Background="{StaticResource SurfaceLowestBrush}"
+                                    CornerRadius="12" Padding="16" Margin="0,24,0,0"
+                                    BorderBrush="{StaticResource OutlineVariantBrush}" BorderThickness="0.5">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="?" FontSize="16" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                                    <StackPanel>
+                                        <TextBlock Text="Vault Reconciled" FontFamily="Inter, Segoe UI" FontSize="12"
+                                                   FontWeight="Bold" Foreground="{StaticResource OnSurfaceBrush}"/>
+                                        <TextBlock Text="Confirmed by Manager" FontFamily="Inter, Segoe UI" FontSize="10"
+                                                   Foreground="{StaticResource OnSurfaceVariantBrush}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Payment bars -->
+                            <StackPanel>
+                                <!-- Card -->
+                                <StackPanel Margin="0,0,0,24">
+                                    <DockPanel Margin="0,0,0,8">
+                                        <TextBlock Text="Credit Card" FontFamily="Manrope, Segoe UI" FontWeight="Bold"
+                                                   Foreground="{StaticResource OnSurfaceBrush}"/>
+                                        <TextBlock DockPanel.Dock="Right" HorizontalAlignment="Right"
+                                                   FontFamily="Manrope, Segoe UI" FontWeight="ExtraBold"
+                                                   Foreground="{StaticResource PrimaryDarkBrush}">
+                                            <TextBlock.Text>
+                                                <Binding Path="SystemCardTotal" StringFormat="${0:N2}"/>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </DockPanel>
+                                    <Border Height="8" CornerRadius="4" Background="{StaticResource SurfaceHighestBrush}">
+                                        <Border Height="8" CornerRadius="4" Background="{StaticResource PrimaryDarkBrush}"
+                                                HorizontalAlignment="Left" Width="180"/>
+                                    </Border>
+                                    <TextBlock Text="71% OF TOTAL" FontFamily="Inter, Segoe UI" FontSize="10"
+                                               FontWeight="ExtraBold" Foreground="{StaticResource OnSurfaceVariantBrush}"
+                                               Margin="0,6,0,0"/>
+                                </StackPanel>
+                                <!-- Cash -->
+                                <StackPanel Margin="0,0,0,24">
+                                    <DockPanel Margin="0,0,0,8">
+                                        <TextBlock Text="Cash" FontFamily="Manrope, Segoe UI" FontWeight="Bold"
+                                                   Foreground="{StaticResource OnSurfaceBrush}"/>
+                                        <TextBlock DockPanel.Dock="Right" HorizontalAlignment="Right"
+                                                   FontFamily="Manrope, Segoe UI" FontWeight="ExtraBold"
+                                                   Foreground="{StaticResource OnSurfaceBrush}">
+                                            <TextBlock.Text>
+                                                <Binding Path="SystemCashTotal" StringFormat="${0:N2}"/>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </DockPanel>
+                                    <Border Height="8" CornerRadius="4" Background="{StaticResource SurfaceHighestBrush}">
+                                        <Border Height="8" CornerRadius="4"
+                                                HorizontalAlignment="Left" Width="55">
+                                            <Border.Background>
+                                                <SolidColorBrush Color="{StaticResource PrimaryContainerColor}"/>
+                                            </Border.Background>
+                                        </Border>
+                                    </Border>
+                                    <TextBlock Text="21% OF TOTAL" FontFamily="Inter, Segoe UI" FontSize="10"
+                                               FontWeight="ExtraBold" Foreground="{StaticResource OnSurfaceVariantBrush}"
+                                               Margin="0,6,0,0"/>
+                                </StackPanel>
+                                <!-- Points -->
+                                <StackPanel>
+                                    <DockPanel Margin="0,0,0,8">
+                                        <TextBlock Text="Loyalty Points" FontFamily="Manrope, Segoe UI" FontWeight="Bold"
+                                                   Foreground="{StaticResource OnSurfaceBrush}"/>
+                                        <TextBlock DockPanel.Dock="Right" HorizontalAlignment="Right"
+                                                   FontFamily="Manrope, Segoe UI" FontWeight="ExtraBold"
+                                                   Foreground="{StaticResource TertiaryBrush}">
+                                            <TextBlock.Text>
+                                                <Binding Path="SystemPointsTotal" StringFormat="${0:N2}"/>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </DockPanel>
+                                    <Border Height="8" CornerRadius="4" Background="{StaticResource SurfaceHighestBrush}">
+                                        <Border Height="8" CornerRadius="4"
+                                                Background="{StaticResource TertiaryContainerBrush}"
+                                                HorizontalAlignment="Left" Width="20"/>
+                                    </Border>
+                                    <TextBlock Text="8% REDEMPTION" FontFamily="Inter, Segoe UI" FontSize="10"
+                                               FontWeight="ExtraBold" Foreground="{StaticResource OnSurfaceVariantBrush}"
+                                               Margin="0,6,0,0"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+
+                    <!-- Transaction Ledger -->
+                    <Border Grid.Column="2" Background="{StaticResource SurfaceLowestBrush}" CornerRadius="16">
+                        <DockPanel>
+                            <Border DockPanel.Dock="Top" Padding="24,20"
+                                    BorderBrush="{StaticResource SurfaceContainerBrush}" BorderThickness="0,0,0,1">
+                                <DockPanel>
+                                    <TextBlock Text="Recent Transactions" FontFamily="Manrope, Segoe UI" FontSize="20"
+                                               FontWeight="Bold" Foreground="{StaticResource OnSurfaceBrush}"/>
+                                    <Button DockPanel.Dock="Right" HorizontalAlignment="Right"
+                                            Content="View All ?" Style="{StaticResource LinkButtonStyle}"
+                                            Foreground="{StaticResource PrimaryDarkBrush}"/>
+                                </DockPanel>
+                            </Border>
+
+                            <DataGrid ItemsSource="{Binding TodayTransactions}" AutoGenerateColumns="False"
+                                      IsReadOnly="True" BorderThickness="0" Background="Transparent"
+                                      RowBackground="White" AlternatingRowBackground="{StaticResource SurfaceLowBrush}"
+                                      HeadersVisibility="Column" GridLinesVisibility="None"
+                                      ColumnHeaderHeight="48" RowHeight="56"
+                                      FontFamily="Inter, Segoe UI" FontSize="13">
+                                <DataGrid.ColumnHeaderStyle>
+                                    <Style TargetType="DataGridColumnHeader">
+                                        <Setter Property="Background" Value="{StaticResource SurfaceLowBrush}"/>
+                                        <Setter Property="Foreground" Value="{StaticResource OutlineBrush}"/>
+                                        <Setter Property="FontFamily" Value="Inter"/>
+                                        <Setter Property="FontWeight" Value="Bold"/>
+                                        <Setter Property="FontSize" Value="10"/>
+                                        <Setter Property="Padding" Value="24,0"/>
+                                        <Setter Property="BorderThickness" Value="0"/>
+                                        <Setter Property="Height" Value="48"/>
+                                    </Style>
+                                </DataGrid.ColumnHeaderStyle>
+                                <DataGrid.CellStyle>
+                                    <Style TargetType="DataGridCell">
+                                        <Setter Property="Padding" Value="24,0"/>
+                                        <Setter Property="BorderThickness" Value="0"/>
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                        <Setter Property="Foreground" Value="{StaticResource OnSurfaceBrush}"/>
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="DataGridCell">
+                                                    <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
+                                                        <ContentPresenter VerticalAlignment="Center"/>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </DataGrid.CellStyle>
+                                <DataGrid.RowStyle>
+                                    <Style TargetType="DataGridRow">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="#08000000"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </DataGrid.RowStyle>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="TIME" Binding="{Binding Time, StringFormat=\{0:HH:mm\}}" Width="80"/>
+                                    <DataGridTextColumn Header="ID" Binding="{Binding TransactionId, StringFormat=#{0}}" Width="80"/>
+                                    <DataGridTextColumn Header="METHOD" Binding="{Binding PaymentMethod}" Width="120"/>
+                                    <DataGridTextColumn Header="TOTAL" Binding="{Binding Amount, StringFormat=\{0:C2\}}" Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </DockPanel>
+                    </Border>
+                </Grid>
+
+                <!-- ??? Footer Action Zone ??? -->
+                <Border CornerRadius="16" Padding="32">
+                    <Border.Background>
+                        <SolidColorBrush Color="{StaticResource PrimaryContainerColor}" Opacity="0.1"/>
+                    </Border.Background>
+                    <Border.BorderBrush>
+                        <SolidColorBrush Color="{StaticResource PrimaryColor}" Opacity="0.05"/>
+                    </Border.BorderBrush>
+                    <Border.BorderThickness>1</Border.BorderThickness>
+                    <DockPanel>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Border Width="48" Height="48" CornerRadius="24"
+                                    Background="{StaticResource PrimaryDarkBrush}" Margin="0,0,16,0">
+                                <TextBlock Text="??" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="Ready to initiate Daily Close?" FontFamily="Manrope, Segoe UI"
+                                           FontWeight="Bold" Foreground="{StaticResource PrimaryDarkBrush}"/>
+                                <TextBlock Text="All terminals synced and vault balance matches records."
+                                           FontFamily="Inter, Segoe UI" FontSize="13"
+                                           Foreground="{StaticResource OnSurfaceVariantBrush}"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel DockPanel.Dock="Right" HorizontalAlignment="Right" Orientation="Horizontal">
+                            <Button Content="Re-sync" Style="{StaticResource SecondaryButtonStyle}"
+                                    Height="48" Padding="24,0" Margin="0,0,12,0"/>
+                            <Button Content="Finalize &amp; Close Day" Style="{StaticResource PrimaryButtonStyle}"
+                                    Command="{Binding ShowCashOutModalCommand}"
+                                    Height="48" Padding="32,0"/>
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- ??? Cash Out Modal ??? -->
+        <Border Background="#80000000"
+                Visibility="{Binding IsCashOutModalVisible, Converter={StaticResource BoolToVisConverter}}">
+            <Border Background="White" CornerRadius="16" Width="500" MaxHeight="650"
+                    VerticalAlignment="Center" HorizontalAlignment="Center" Padding="32">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="40" Opacity="0.15" ShadowDepth="0"/>
+                </Border.Effect>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <TextBlock Text="Cash Reconciliation" FontFamily="Manrope, Segoe UI" FontSize="22"
+                                   FontWeight="ExtraBold" Foreground="{StaticResource OnSurfaceBrush}"
+                                   Margin="0,0,0,24"/>
+
+                        <!-- System Total -->
+                        <Border Background="#F0FDFA" CornerRadius="12" Padding="20" Margin="0,0,0,20">
+                            <DockPanel>
+                                <TextBlock Text="System Cash Total" FontFamily="Manrope, Segoe UI" FontSize="14"
+                                           FontWeight="Bold" Foreground="{StaticResource OnSurfaceBrush}"/>
+                                <TextBlock DockPanel.Dock="Right" HorizontalAlignment="Right"
+                                           FontFamily="Manrope, Segoe UI" FontSize="20" FontWeight="ExtraBold"
+                                           Foreground="{StaticResource PrimaryDarkBrush}">
+                                    <TextBlock.Text>
+                                        <Binding Path="SystemCashTotal" StringFormat="${0:N2}"/>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </DockPanel>
+                        </Border>
+
+                        <TextBlock Text="COUNT CURRENCY" FontFamily="Inter, Segoe UI" FontSize="10" FontWeight="ExtraBold"
+                                   Foreground="{StaticResource OnSurfaceVariantBrush}" Margin="0,0,0,16"/>
+
+                        <!-- Denomination Grid -->
+                        <Grid Margin="0,0,0,12">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="16"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,0,4">
+                                <TextBlock Text="$100 BILLS" Style="{StaticResource FormLabelStyle}"/>
+                                <TextBox Text="{Binding Count100, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FormInputStyle}" Height="44" Margin="0,0,0,8"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="0" Grid.Column="2" Margin="0,0,0,4">
+                                <TextBlock Text="$50 BILLS" Style="{StaticResource FormLabelStyle}"/>
+                                <TextBox Text="{Binding Count50, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FormInputStyle}" Height="44" Margin="0,0,0,8"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,0,4">
+                                <TextBlock Text="$20 BILLS" Style="{StaticResource FormLabelStyle}"/>
+                                <TextBox Text="{Binding Count20, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FormInputStyle}" Height="44" Margin="0,0,0,8"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="2" Margin="0,0,0,4">
+                                <TextBlock Text="$10 BILLS" Style="{StaticResource FormLabelStyle}"/>
+                                <TextBox Text="{Binding Count10, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FormInputStyle}" Height="44" Margin="0,0,0,8"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,0,0,4">
+                                <TextBlock Text="$5 BILLS" Style="{StaticResource FormLabelStyle}"/>
+                                <TextBox Text="{Binding Count5, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FormInputStyle}" Height="44" Margin="0,0,0,8"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Grid.Column="2" Margin="0,0,0,4">
+                                <TextBlock Text="$1 BILLS" Style="{StaticResource FormLabelStyle}"/>
+                                <TextBox Text="{Binding Count1, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FormInputStyle}" Height="44" Margin="0,0,0,8"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="3" Grid.Column="0" Margin="0,0,0,4">
+                                <TextBlock Text="QUARTERS" Style="{StaticResource FormLabelStyle}"/>
+                                <TextBox Text="{Binding CountQuarters, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FormInputStyle}" Height="44" Margin="0,0,0,8"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="3" Grid.Column="2" Margin="0,0,0,4">
+                                <TextBlock Text="DIMES" Style="{StaticResource FormLabelStyle}"/>
+                                <TextBox Text="{Binding CountDimes, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FormInputStyle}" Height="44" Margin="0,0,0,8"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="4" Grid.Column="0" Margin="0,0,0,4">
+                                <TextBlock Text="NICKELS" Style="{StaticResource FormLabelStyle}"/>
+                                <TextBox Text="{Binding CountNickels, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FormInputStyle}" Height="44" Margin="0,0,0,8"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="4" Grid.Column="2" Margin="0,0,0,4">
+                                <TextBlock Text="PENNIES" Style="{StaticResource FormLabelStyle}"/>
+                                <TextBox Text="{Binding CountPennies, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FormInputStyle}" Height="44" Margin="0,0,0,8"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <Separator Background="{StaticResource SurfaceHighBrush}" Margin="0,8,0,16"/>
+
+                        <!-- Manual Count -->
+                        <DockPanel Margin="0,0,0,12">
+                            <TextBlock Text="Manual Count" FontFamily="Manrope, Segoe UI" FontSize="14"
+                                       FontWeight="Bold" Foreground="{StaticResource OnSurfaceBrush}"/>
+                            <TextBlock DockPanel.Dock="Right" HorizontalAlignment="Right"
+                                       FontFamily="Manrope, Segoe UI" FontSize="18" FontWeight="ExtraBold"
+                                       Foreground="{StaticResource OnSurfaceBrush}">
+                                <TextBlock.Text>
+                                    <Binding Path="ManualCashCount" StringFormat="${0:N2}"/>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </DockPanel>
+
+                        <!-- Discrepancy -->
+                        <Border CornerRadius="12" Padding="16" Margin="0,0,0,20">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Background" Value="#FEF2F2"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding CashDiscrepancy}" Value="0">
+                                            <Setter Property="Background" Value="#F0FDF4"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <DockPanel>
+                                <TextBlock Text="Discrepancy" FontFamily="Manrope, Segoe UI" FontSize="14"
+                                           FontWeight="SemiBold" Foreground="{StaticResource OnSurfaceBrush}"/>
+                                <TextBlock DockPanel.Dock="Right" HorizontalAlignment="Right"
+                                           FontFamily="Manrope, Segoe UI" FontSize="18" FontWeight="ExtraBold">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Foreground" Value="#DC2626"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding CashDiscrepancy}" Value="0">
+                                                    <Setter Property="Foreground" Value="#16A34A"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                    <TextBlock.Text>
+                                        <Binding Path="CashDiscrepancy" StringFormat="${0:N2}"/>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                            </DockPanel>
+                        </Border>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Content="Cancel" Command="{Binding CloseCashOutModalCommand}"
+                                    Style="{StaticResource SecondaryButtonStyle}" Width="120" Height="44" Margin="0,0,12,0"/>
+                            <Button Content="Submit" Command="{Binding SubmitCashOutCommand}"
+                                    Style="{StaticResource PrimaryButtonStyle}" Width="120" Height="44"/>
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </Border>
+    </Grid>
+</UserControl>

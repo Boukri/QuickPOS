@@ -1,0 +1,296 @@
+<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             x:Class="QuickPOS.Features.Inventory.InventoryBatchView"
+             mc:Ignorable="d"
+             d:DesignHeight="800" d:DesignWidth="1100"
+             Background="{StaticResource SurfaceBrush}">
+    <Grid>
+        <Grid Margin="40">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <!-- Stats bento row -->
+                <RowDefinition Height="*"/>
+                <!-- Batch DataGrid -->
+            </Grid.RowDefinitions>
+            <!-- ?? Stats bento row -->
+            <Grid Grid.Row="0" Margin="0,0,0,28">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="24"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="24"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="24"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Total Units -->
+                <Border Grid.Column="0" Background="{StaticResource SurfaceLowestBrush}"
+                    CornerRadius="12" Padding="20" Height="100">
+                    <StackPanel>
+                        <TextBlock Text="TOTAL UNITS" FontFamily="Inter, Segoe UI" FontSize="11"
+                               FontWeight="ExtraBold" Foreground="{StaticResource OnSurfaceVariantBrush}"/>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+                            <TextBlock Text="{Binding TotalUnits}"
+                                   FontFamily="Manrope, Segoe UI" FontSize="36" FontWeight="ExtraBold"
+                                   Foreground="{StaticResource PrimaryDarkBrush}" VerticalAlignment="Bottom"/>
+                            <TextBlock Text="units" FontFamily="Inter, Segoe UI" FontSize="13" FontWeight="Bold"
+                                   Foreground="#0D9488" VerticalAlignment="Bottom" Margin="8,0,0,4"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Total Stock Value -->
+                <Border Grid.Column="2" Background="{StaticResource SurfaceLowestBrush}"
+                    CornerRadius="12" Padding="20" Height="100">
+                    <StackPanel>
+                        <TextBlock Text="STOCK VALUE" FontFamily="Inter, Segoe UI" FontSize="11"
+                               FontWeight="ExtraBold" Foreground="{StaticResource OnSurfaceVariantBrush}"/>
+                        <TextBlock Text="{Binding TotalStockValue, StringFormat={}{0:C2}}"
+                               FontFamily="Manrope, Segoe UI" FontSize="28" FontWeight="ExtraBold"
+                               Foreground="{StaticResource PrimaryDarkBrush}" VerticalAlignment="Bottom"
+                               Margin="0,4,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Weighted Average Cost -->
+                <Border Grid.Column="4" Background="{StaticResource PrimaryFixedBrush}"
+                    CornerRadius="12" Padding="20" Height="100">
+                    <StackPanel>
+                        <TextBlock Text="WEIGHTED AVG COST" FontFamily="Inter, Segoe UI" FontSize="11"
+                               FontWeight="ExtraBold" Foreground="#00504C"/>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+                            <TextBlock Text="{Binding WeightedAverageCost, StringFormat={}{0:C4}}"
+                                   FontFamily="Manrope, Segoe UI" FontSize="28" FontWeight="ExtraBold"
+                                   Foreground="#00504C" VerticalAlignment="Bottom" Margin="0,4,0,0"/>
+                            <TextBlock Text="/ unit" FontFamily="Inter, Segoe UI" FontSize="13" FontWeight="Bold"
+                                   Foreground="#00504C" VerticalAlignment="Bottom" Margin="8,0,0,6"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Session COGS -->
+                <Border Grid.Column="6" Background="{StaticResource SurfaceLowestBrush}"
+                    CornerRadius="12" Padding="20" Height="100">
+                    <StackPanel>
+                        <TextBlock Text="SESSION COGS" FontFamily="Inter, Segoe UI" FontSize="11"
+                               FontWeight="ExtraBold" Foreground="{StaticResource OnSurfaceVariantBrush}"/>
+                        <TextBlock Text="{Binding SessionCOGS, StringFormat={}{0:C2}}"
+                               FontFamily="Manrope, Segoe UI" FontSize="28" FontWeight="ExtraBold"
+                               Foreground="{StaticResource TertiaryBrush}" VerticalAlignment="Bottom"
+                               Margin="0,4,0,0"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+            <!-- ?? Batch DataGrid ???????????????????????????????????????? -->
+            <Border Grid.Row="1" Background="{StaticResource SurfaceLowBrush}" CornerRadius="12">
+                <DataGrid ItemsSource="{Binding Batches}" AutoGenerateColumns="False"
+                      IsReadOnly="True" CanUserSortColumns="True"
+                      HeadersVisibility="Column" GridLinesVisibility="None"
+                      BorderThickness="0"
+                      Background="Transparent"
+                      RowBackground="{StaticResource SurfaceLowestBrush}"
+                      AlternatingRowBackground="{StaticResource SurfaceLowBrush}"
+                      FontFamily="Inter, Segoe UI" FontSize="13"
+                      ColumnHeaderHeight="48" RowHeight="56"
+                      SelectionMode="Single" SelectionUnit="FullRow">
+
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Background" Value="{StaticResource SurfaceHighBrush}"/>
+                            <Setter Property="Foreground" Value="{StaticResource OnSurfaceVariantBrush}"/>
+                            <Setter Property="FontFamily" Value="Inter"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="FontSize" Value="11"/>
+                            <Setter Property="Padding" Value="20,0"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
+                    <DataGrid.Columns>
+
+                        <!-- Product name -->
+                        <DataGridTemplateColumn Header="PRODUCT" Width="*" SortMemberPath="ProductName">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding ProductName}"
+                                               FontFamily="Inter, Segoe UI" FontWeight="Bold"
+                                               Foreground="{StaticResource OnSurfaceBrush}"
+                                               VerticalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!-- Received date -->
+                        <DataGridTemplateColumn Header="RECEIVED" Width="140" SortMemberPath="ReceivedAt">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding ReceivedAt, StringFormat=dd/MM/yyyy HH:mm}"
+                                           FontFamily="Inter, Segoe UI" FontSize="12"
+                                           Foreground="{StaticResource TextSecondaryBrush}"
+                                           VerticalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!-- Reference -->
+                        <DataGridTemplateColumn Header="REFERENCE" Width="120">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontFamily="Inter, Segoe UI" FontSize="12"
+                                           Foreground="{StaticResource OutlineBrush}"
+                                           VerticalAlignment="Center">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Text" Value="{Binding Reference}"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Reference}" Value="{x:Null}">
+                                                        <Setter Property="Text" Value="--"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!-- Unit Cost -->
+                        <DataGridTemplateColumn Header="UNIT COST" Width="110" SortMemberPath="UnitCost">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding UnitCost, StringFormat={}{0:C2}}"
+                                           FontFamily="Manrope, Segoe UI" FontWeight="SemiBold"
+                                           Foreground="{StaticResource PrimaryDarkBrush}"
+                                           VerticalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!-- QTY In -->
+                        <DataGridTemplateColumn Header="QTY IN" Width="90" SortMemberPath="QuantityReceived">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding QuantityReceived}"
+                                           FontFamily="Inter, Segoe UI"
+                                           Foreground="{StaticResource OnSurfaceVariantBrush}"
+                                           HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!-- QTY Sold -->
+                        <DataGridTemplateColumn Header="QTY SOLD" Width="90" SortMemberPath="QuantitySold">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding QuantitySold}"
+                                           FontFamily="Inter, Segoe UI"
+                                           Foreground="{StaticResource TertiaryBrush}"
+                                           HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!-- QTY Remaining + progress bar -->
+                        <DataGridTemplateColumn Header="REMAINING" Width="140" SortMemberPath="QuantityRemaining">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock FontFamily="Inter, Segoe UI" FontWeight="Bold"
+                                               HorizontalAlignment="Right" Margin="0,0,0,3">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Text" Value="{Binding QuantityRemaining}"/>
+                                                    <Setter Property="Foreground" Value="{StaticResource OnSurfaceBrush}"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsExhausted}" Value="True">
+                                                            <Setter Property="Foreground" Value="{StaticResource ErrorBrush}"/>
+                                                            <Setter Property="Text" Value="DEPLETED"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                        <ProgressBar Minimum="0" Maximum="{Binding QuantityReceived, Mode=OneWay}"
+                                                 Value="{Binding QuantityRemaining, Mode=OneWay}"
+                                                 Height="4" BorderThickness="0"
+                                                 Background="{StaticResource SurfaceHighestBrush}"
+                                                 Foreground="{StaticResource PrimaryBrush}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <!-- Remaining Value -->
+                        <DataGridTemplateColumn Header="LAYER VALUE" Width="120" SortMemberPath="RemainingValue">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding RemainingValue, StringFormat={}{0:C2}}"
+                                           FontFamily="Manrope, Segoe UI" FontWeight="Bold"
+                                           Foreground="#0D9488"
+                                           HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+        </Grid>
+
+
+        <!-- Floating Action Button: Receive Stock -->
+        <Button Width="176" Height="64"
+                HorizontalAlignment="Right" VerticalAlignment="Bottom"
+                Margin="0,0,40,40"
+                Cursor="Hand"
+                Command="{Binding ShowReceiveFormCommand}"
+                ToolTip="Receive Stock">
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="fabBorder" Width="164" Height="44" CornerRadius="22"
+                            RenderTransformOrigin="0.5,0.5">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="{StaticResource PrimaryColor}" Offset="0"/>
+                                <GradientStop Color="{StaticResource PrimaryContainerColor}" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="24" Opacity="0.25" ShadowDepth="6"
+                                              Color="{StaticResource PrimaryColor}"/>
+                        </Border.Effect>
+                        <Border.RenderTransform>
+                            <ScaleTransform ScaleX="1" ScaleY="1"/>
+                        </Border.RenderTransform>
+                        <TextBlock Text="RECEIVE STOCK" FontFamily="Manrope, Segoe UI" FontSize="18" FontWeight="Bold"
+                                   Foreground="White"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                                   Margin="0,-2,0,0"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="fabBorder" Property="Opacity" Value="0.4"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="fabBorder" Property="RenderTransform">
+                                <Setter.Value>
+                                    <ScaleTransform ScaleX="1.1" ScaleY="1.1"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="fabBorder" Property="RenderTransform">
+                                <Setter.Value>
+                                    <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+    </Grid>
+    <!-- /outer Grid -->
+</UserControl>

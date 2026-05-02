@@ -1,0 +1,326 @@
+<UserControl x:Class="QuickPOS.Features.Dashboard.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="800" d:DesignWidth="1100"
+             Background="{StaticResource SurfaceBrush}">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="40">
+
+            <!--  Hero KPI Cards -->
+            <Grid Margin="0,0,0,40">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="24"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="24"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Total Revenue -->
+                <Border Grid.Column="0" Background="{StaticResource SurfaceLowestBrush}" CornerRadius="12"
+                        Padding="32" MinHeight="180">
+                    <DockPanel>
+                        <DockPanel DockPanel.Dock="Top">
+                            <TextBlock FontFamily="Inter, Segoe UI" FontSize="11" FontWeight="ExtraBold"
+                                       Foreground="{StaticResource OnSurfaceVariantBrush}"
+                                       Text="TOTAL REVENUE"/>
+                            <Border DockPanel.Dock="Right" HorizontalAlignment="Right"
+                                    Width="40" Height="40" CornerRadius="20" Margin="0">
+                                <Border.Background>
+                                    <SolidColorBrush Color="{StaticResource PrimaryColor}" Opacity="0.1"/>
+                                </Border.Background>
+                                <TextBlock Text="??" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </DockPanel>
+                        <StackPanel VerticalAlignment="Bottom" Margin="0,16,0,0">
+                            <TextBlock FontFamily="Manrope, Segoe UI" FontSize="42" FontWeight="ExtraBold"
+                                       Foreground="{StaticResource OnSurfaceBrush}">
+                                <TextBlock.Text>
+                                    <Binding Path="TotalRevenue" StringFormat="${0:N0}"/>
+                                </TextBlock.Text>
+                            </TextBlock>
+                            <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                                <TextBlock Text="??" FontSize="12" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                <TextBlock FontFamily="Inter, Segoe UI" FontSize="13" FontWeight="Bold"
+                                           Foreground="{StaticResource PrimaryDarkBrush}"
+                                           Text="+12.4% vs last month"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+
+                <!-- Total Expenses -->
+                <Border Grid.Column="2" Background="{StaticResource SurfaceLowestBrush}" CornerRadius="12"
+                        Padding="32" MinHeight="180">
+                    <DockPanel>
+                        <DockPanel DockPanel.Dock="Top">
+                            <TextBlock FontFamily="Inter, Segoe UI" FontSize="11" FontWeight="ExtraBold"
+                                       Foreground="{StaticResource OnSurfaceVariantBrush}"
+                                       Text="TOTAL EXPENSES"/>
+                            <Border DockPanel.Dock="Right" HorizontalAlignment="Right"
+                                    Width="40" Height="40" CornerRadius="20">
+                                <Border.Background>
+                                    <SolidColorBrush Color="{StaticResource TertiaryContainerColor}" Opacity="0.2"/>
+                                </Border.Background>
+                                <TextBlock Text="??" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </DockPanel>
+                        <StackPanel VerticalAlignment="Bottom" Margin="0,16,0,0">
+                            <TextBlock FontFamily="Manrope, Segoe UI" FontSize="42" FontWeight="ExtraBold"
+                                       Foreground="{StaticResource OnSurfaceBrush}">
+                                <TextBlock.Text>
+                                    <Binding Path="TotalExpenses" StringFormat="${0:N0}"/>
+                                </TextBlock.Text>
+                            </TextBlock>
+                            <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                                <TextBlock Text="??" FontSize="12" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                <TextBlock FontFamily="Inter, Segoe UI" FontSize="13" FontWeight="Bold"
+                                           Foreground="{StaticResource TertiaryBrush}"
+                                           Text="-4.2% optimized"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+
+                <!-- Net Profit (Gradient) -->
+                <Border Grid.Column="4" CornerRadius="12" Padding="32" MinHeight="180">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                            <GradientStop Color="{StaticResource PrimaryColor}" Offset="0"/>
+                            <GradientStop Color="{StaticResource PrimaryContainerColor}" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <DockPanel>
+                        <DockPanel DockPanel.Dock="Top">
+                            <TextBlock FontFamily="Inter, Segoe UI" FontSize="11" FontWeight="ExtraBold"
+                                       Foreground="{StaticResource OnPrimaryContainerBrush}" Opacity="0.8"
+                                       Text="NET PROFIT"/>
+                            <Border DockPanel.Dock="Right" HorizontalAlignment="Right"
+                                    Width="40" Height="40" CornerRadius="20" Background="#33FFFFFF">
+                                <TextBlock Text="??" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </DockPanel>
+                        <StackPanel VerticalAlignment="Bottom" Margin="0,16,0,0">
+                            <TextBlock FontFamily="Manrope, Segoe UI" FontSize="42" FontWeight="ExtraBold"
+                                       Foreground="White">
+                                <TextBlock.Text>
+                                    <Binding Path="NetProfit" StringFormat="${0:N0}"/>
+                                </TextBlock.Text>
+                            </TextBlock>
+                            <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                                <TextBlock Text="?" FontSize="12" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                <TextBlock FontFamily="Inter, Segoe UI" FontSize="13" FontWeight="Bold"
+                                           Foreground="{StaticResource PrimaryFixedBrush}"
+                                           Text="Peak performance"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+            </Grid>
+
+            <!--  Chart + Recent Flow -->
+            <Grid Margin="0,0,0,40">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="24"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Monthly Bar Chart -->
+                <Border Grid.Column="0" Background="{StaticResource SurfaceLowestBrush}" CornerRadius="12" Padding="32">
+                    <DockPanel>
+                        <DockPanel DockPanel.Dock="Top" Margin="0,0,0,32">
+                            <StackPanel>
+                                <TextBlock Text="Monthly Profit vs. Expenses" FontFamily="Manrope, Segoe UI" FontSize="22"
+                                           FontWeight="Bold" Foreground="{StaticResource OnSurfaceBrush}"/>
+                                <TextBlock Text="Fiscal Year Performance Overview" FontFamily="Inter, Segoe UI" FontSize="13"
+                                           Foreground="{StaticResource OnSurfaceVariantBrush}" Margin="0,4,0,0"/>
+                            </StackPanel>
+                            <StackPanel DockPanel.Dock="Right" HorizontalAlignment="Right" Orientation="Horizontal"
+                                        VerticalAlignment="Top">
+                                <Border Width="12" Height="12" CornerRadius="6"
+                                        Background="{StaticResource PrimaryDarkBrush}" Margin="0,0,6,0"/>
+                                <TextBlock Text="PROFIT" FontFamily="Inter, Segoe UI" FontSize="10" FontWeight="Bold"
+                                           Foreground="{StaticResource OnSurfaceVariantBrush}" Margin="0,0,16,0"
+                                           VerticalAlignment="Center"/>
+                                <Border Width="12" Height="12" CornerRadius="6"
+                                        Background="{StaticResource TertiaryContainerBrush}" Margin="0,0,6,0"/>
+                                <TextBlock Text="EXPENSES" FontFamily="Inter, Segoe UI" FontSize="10" FontWeight="Bold"
+                                           Foreground="{StaticResource OnSurfaceVariantBrush}"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </DockPanel>
+
+                        <!-- Bar Chart -->
+                        <ItemsControl ItemsSource="{Binding MonthlyStats}" Height="240">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Rows="1"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="8,0" VerticalAlignment="Bottom">
+                                        <Grid Height="200" VerticalAlignment="Bottom">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="4"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Border Grid.Column="0" CornerRadius="4,4,0,0"
+                                                    VerticalAlignment="Bottom" MinHeight="8" Opacity="0.3">
+                                                <Border.Background>
+                                                    <SolidColorBrush Color="{StaticResource TertiaryContainerColor}"/>
+                                                </Border.Background>
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="Height" Value="40"/>
+                                                    </Style>
+                                                </Border.Style>
+                                            </Border>
+                                            <Border Grid.Column="2" Background="{StaticResource PrimaryDarkBrush}"
+                                                    CornerRadius="4,4,0,0"
+                                                    VerticalAlignment="Bottom" MinHeight="8">
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="Height" Value="80"/>
+                                                    </Style>
+                                                </Border.Style>
+                                            </Border>
+                                        </Grid>
+                                        <TextBlock Text="{Binding Month}" FontFamily="Inter, Segoe UI" FontSize="11"
+                                                   FontWeight="Bold" Foreground="{StaticResource OnSurfaceVariantBrush}"
+                                                   TextAlignment="Center" Margin="0,8,0,0"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </DockPanel>
+                </Border>
+
+                <!-- Recent Flow Sidebar -->
+                <Border Grid.Column="2" Background="{StaticResource SurfaceLowBrush}" CornerRadius="12"
+                        BorderBrush="#30FFFFFF" BorderThickness="1">
+                    <DockPanel>
+                        <Border DockPanel.Dock="Top" Padding="24" BorderBrush="#20FFFFFF" BorderThickness="0,0,0,1">
+                            <StackPanel>
+                                <TextBlock Text="Recent Flow" FontFamily="Manrope, Segoe UI" FontSize="16" FontWeight="Bold"
+                                           Foreground="{StaticResource OnSurfaceBrush}"/>
+                                <TextBlock Text="Real-time ledger updates" FontFamily="Inter, Segoe UI" FontSize="12"
+                                           Foreground="{StaticResource OnSurfaceVariantBrush}" Margin="0,2,0,0"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Button DockPanel.Dock="Bottom" Content="Download Full Ledger"
+                                Style="{StaticResource SecondaryButtonStyle}" Height="44"
+                                FontSize="13" Margin="24"/>
+
+                        <ItemsControl ItemsSource="{Binding RecentActivity}" Margin="8">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="{StaticResource SurfaceLowestBrush}" CornerRadius="8"
+                                            Padding="16" Margin="0,0,0,8">
+                                        <DockPanel>
+                                            <Border Width="40" Height="40" CornerRadius="20"
+                                                    Margin="0,0,12,0" VerticalAlignment="Center">
+                                                <Border.Background>
+                                                    <SolidColorBrush Color="{StaticResource PrimaryColor}" Opacity="0.1"/>
+                                                </Border.Background>
+                                                <TextBlock Text="??" FontSize="14"
+                                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                            <StackPanel VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Description}" FontFamily="Manrope, Segoe UI" FontSize="13"
+                                                           FontWeight="Bold" Foreground="{StaticResource OnSurfaceBrush}"/>
+                                                <TextBlock FontFamily="Inter, Segoe UI" FontSize="10" FontWeight="ExtraBold"
+                                                           Foreground="{StaticResource OnSurfaceVariantBrush}" Margin="0,2,0,0"
+                                                           Text="{Binding Type}"/>
+                                            </StackPanel>
+                                            <TextBlock DockPanel.Dock="Right" HorizontalAlignment="Right"
+                                                       VerticalAlignment="Center"
+                                                       FontFamily="Manrope, Segoe UI" FontSize="13" FontWeight="Bold"
+                                                       Foreground="{StaticResource PrimaryDarkBrush}">
+                                                <TextBlock.Text>
+                                                    <Binding Path="Amount" StringFormat="+${0:F0}"/>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                        </DockPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </DockPanel>
+                </Border>
+            </Grid>
+
+            <!--  Bottom Bento Row -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="24"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="24"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Inventory Efficiency -->
+                <Border Grid.Column="0" Background="{StaticResource SurfaceLowestBrush}" CornerRadius="12"
+                        Padding="32" MinHeight="120">
+                    <DockPanel>
+                        <StackPanel>
+                            <TextBlock Text="Inventory Efficiency" FontFamily="Manrope, Segoe UI" FontSize="18"
+                                       FontWeight="Bold" Foreground="{StaticResource OnSurfaceBrush}" Margin="0,0,0,8"/>
+                            <TextBlock Text="Clinical stock turnover is 15% faster than last quarter."
+                                       FontFamily="Inter, Segoe UI" FontSize="13" Foreground="{StaticResource OnSurfaceVariantBrush}"
+                                       TextWrapping="Wrap" Margin="0,0,0,16"/>
+                            <Border Height="8" CornerRadius="4" Background="{StaticResource SurfaceHighBrush}">
+                                <Border Height="8" CornerRadius="4" Background="{StaticResource PrimaryDarkBrush}"
+                                        HorizontalAlignment="Left" Width="250"/>
+                            </Border>
+                            <TextBlock Text="78% OPTIMAL UTILIZATION" FontFamily="Inter, Segoe UI" FontSize="10"
+                                       FontWeight="ExtraBold" Foreground="{StaticResource OnSurfaceVariantBrush}"
+                                       Margin="0,8,0,0"/>
+                        </StackPanel>
+                    </DockPanel>
+                </Border>
+
+                <!-- Low Stock Alerts -->
+                <Border Grid.Column="2" Background="{StaticResource TertiaryContainerBrush}" CornerRadius="12"
+                        Padding="32">
+                    <StackPanel>
+                        <TextBlock Text="??" FontSize="28" Margin="0,0,0,12"/>
+                        <TextBlock Text="Low Stock Alerts" FontFamily="Manrope, Segoe UI" FontWeight="Bold" FontSize="15"
+                                   Foreground="White"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,16,0,0" VerticalAlignment="Bottom">
+                            <TextBlock Text="12" FontFamily="Manrope, Segoe UI" FontSize="30" FontWeight="ExtraBold" Foreground="White"/>
+                            <TextBlock Text=" Items" FontFamily="Inter, Segoe UI" FontSize="13" Foreground="White" Opacity="0.7"
+                                       VerticalAlignment="Bottom" Margin="0,0,0,4"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Staff Efficiency -->
+                <Border Grid.Column="4" CornerRadius="12" Padding="32">
+                    <Border.Background>
+                        <SolidColorBrush Color="{StaticResource PrimaryContainerColor}"/>
+                    </Border.Background>
+                    <StackPanel>
+                        <TextBlock Text="??" FontSize="28" Margin="0,0,0,12"/>
+                        <TextBlock Text="Staff Efficiency" FontFamily="Manrope, Segoe UI" FontWeight="Bold" FontSize="15"
+                                   Foreground="{StaticResource OnPrimaryContainerBrush}"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,16,0,0">
+                            <TextBlock Text="94%" FontFamily="Manrope, Segoe UI" FontSize="30" FontWeight="ExtraBold"
+                                       Foreground="{StaticResource OnPrimaryContainerBrush}"/>
+                            <TextBlock Text=" Rating" FontFamily="Inter, Segoe UI" FontSize="13"
+                                       Foreground="{StaticResource OnPrimaryContainerBrush}" Opacity="0.7"
+                                       VerticalAlignment="Bottom" Margin="0,0,0,4"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
