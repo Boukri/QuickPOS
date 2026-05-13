@@ -2,89 +2,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:core="clr-namespace:QuickPOS.Core"
              x:Class="QuickPOS.Features.Inventory.InventoryBatchView"
              mc:Ignorable="d"
              d:DesignHeight="800" d:DesignWidth="1100"
              Background="{StaticResource SurfaceBrush}">
     <Grid>
-        <Grid Margin="40">
+        <Grid Margin="20">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <!-- Stats bento row -->
                 <RowDefinition Height="*"/>
                 <!-- Batch DataGrid -->
             </Grid.RowDefinitions>
-            <!-- ?? Stats bento row -->
-            <Grid Grid.Row="0" Margin="0,0,0,28">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="24"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="24"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="24"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <!-- Total Units -->
-                <Border Grid.Column="0" Background="{StaticResource SurfaceLowestBrush}"
-                    CornerRadius="12" Padding="20" Height="100">
-                    <StackPanel>
-                        <TextBlock Text="TOTAL UNITS" FontFamily="Inter, Segoe UI" FontSize="11"
-                               FontWeight="ExtraBold" Foreground="{StaticResource OnSurfaceVariantBrush}"/>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
-                            <TextBlock Text="{Binding TotalUnits}"
-                                   FontFamily="Manrope, Segoe UI" FontSize="36" FontWeight="ExtraBold"
-                                   Foreground="{StaticResource PrimaryDarkBrush}" VerticalAlignment="Bottom"/>
-                            <TextBlock Text="units" FontFamily="Inter, Segoe UI" FontSize="13" FontWeight="Bold"
-                                   Foreground="#0D9488" VerticalAlignment="Bottom" Margin="8,0,0,4"/>
-                        </StackPanel>
-                    </StackPanel>
-                </Border>
-
-                <!-- Total Stock Value -->
-                <Border Grid.Column="2" Background="{StaticResource SurfaceLowestBrush}"
-                    CornerRadius="12" Padding="20" Height="100">
-                    <StackPanel>
-                        <TextBlock Text="STOCK VALUE" FontFamily="Inter, Segoe UI" FontSize="11"
-                               FontWeight="ExtraBold" Foreground="{StaticResource OnSurfaceVariantBrush}"/>
-                        <TextBlock Text="{Binding TotalStockValue, StringFormat={}{0:C2}}"
-                               FontFamily="Manrope, Segoe UI" FontSize="28" FontWeight="ExtraBold"
-                               Foreground="{StaticResource PrimaryDarkBrush}" VerticalAlignment="Bottom"
-                               Margin="0,4,0,0"/>
-                    </StackPanel>
-                </Border>
-
-                <!-- Weighted Average Cost -->
-                <Border Grid.Column="4" Background="{StaticResource PrimaryFixedBrush}"
-                    CornerRadius="12" Padding="20" Height="100">
-                    <StackPanel>
-                        <TextBlock Text="WEIGHTED AVG COST" FontFamily="Inter, Segoe UI" FontSize="11"
-                               FontWeight="ExtraBold" Foreground="#00504C"/>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
-                            <TextBlock Text="{Binding WeightedAverageCost, StringFormat={}{0:C4}}"
-                                   FontFamily="Manrope, Segoe UI" FontSize="28" FontWeight="ExtraBold"
-                                   Foreground="#00504C" VerticalAlignment="Bottom" Margin="0,4,0,0"/>
-                            <TextBlock Text="/ unit" FontFamily="Inter, Segoe UI" FontSize="13" FontWeight="Bold"
-                                   Foreground="#00504C" VerticalAlignment="Bottom" Margin="8,0,0,6"/>
-                        </StackPanel>
-                    </StackPanel>
-                </Border>
-
-                <!-- Session COGS -->
-                <Border Grid.Column="6" Background="{StaticResource SurfaceLowestBrush}"
-                    CornerRadius="12" Padding="20" Height="100">
-                    <StackPanel>
-                        <TextBlock Text="SESSION COGS" FontFamily="Inter, Segoe UI" FontSize="11"
-                               FontWeight="ExtraBold" Foreground="{StaticResource OnSurfaceVariantBrush}"/>
-                        <TextBlock Text="{Binding SessionCOGS, StringFormat={}{0:C2}}"
-                               FontFamily="Manrope, Segoe UI" FontSize="28" FontWeight="ExtraBold"
-                               Foreground="{StaticResource TertiaryBrush}" VerticalAlignment="Bottom"
-                               Margin="0,4,0,0"/>
-                    </StackPanel>
-                </Border>
-            </Grid>
-            <!-- ?? Batch DataGrid ???????????????????????????????????????? -->
+           
+            <!--  Batch DataGrid -->
             <Border Grid.Row="1" Background="{StaticResource SurfaceLowBrush}" CornerRadius="12">
                 <DataGrid ItemsSource="{Binding Batches}" AutoGenerateColumns="False"
                       IsReadOnly="True" CanUserSortColumns="True"
@@ -111,7 +43,7 @@
                     <DataGrid.Columns>
 
                         <!-- Product name -->
-                        <DataGridTemplateColumn Header="PRODUCT" Width="*" SortMemberPath="ProductName">
+                        <DataGridTemplateColumn Header="{Binding InvColProduct, Source={x:Static core:LocalizationService.Instance}}" Width="*" SortMemberPath="ProductName">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding ProductName}"
@@ -123,7 +55,7 @@
                         </DataGridTemplateColumn>
 
                         <!-- Received date -->
-                        <DataGridTemplateColumn Header="RECEIVED" Width="140" SortMemberPath="ReceivedAt">
+                        <DataGridTemplateColumn Header="{Binding InvColReceived, Source={x:Static core:LocalizationService.Instance}}" Width="140" SortMemberPath="ReceivedAt">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding ReceivedAt, StringFormat=dd/MM/yyyy HH:mm}"
@@ -135,7 +67,7 @@
                         </DataGridTemplateColumn>
 
                         <!-- Reference -->
-                        <DataGridTemplateColumn Header="REFERENCE" Width="120">
+                        <DataGridTemplateColumn Header="{Binding InvColReference, Source={x:Static core:LocalizationService.Instance}}" Width="120">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock FontFamily="Inter, Segoe UI" FontSize="12"
@@ -157,7 +89,7 @@
                         </DataGridTemplateColumn>
 
                         <!-- Unit Cost -->
-                        <DataGridTemplateColumn Header="UNIT COST" Width="110" SortMemberPath="UnitCost">
+                        <DataGridTemplateColumn Header="{Binding InvColUnitCost, Source={x:Static core:LocalizationService.Instance}}" Width="110" SortMemberPath="UnitCost">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding UnitCost, StringFormat={}{0:C2}}"
@@ -169,7 +101,7 @@
                         </DataGridTemplateColumn>
 
                         <!-- QTY In -->
-                        <DataGridTemplateColumn Header="QTY IN" Width="90" SortMemberPath="QuantityReceived">
+                        <DataGridTemplateColumn Header="{Binding InvColQtyIn, Source={x:Static core:LocalizationService.Instance}}" Width="90" SortMemberPath="QuantityReceived">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding QuantityReceived}"
@@ -181,7 +113,7 @@
                         </DataGridTemplateColumn>
 
                         <!-- QTY Sold -->
-                        <DataGridTemplateColumn Header="QTY SOLD" Width="90" SortMemberPath="QuantitySold">
+                        <DataGridTemplateColumn Header="{Binding InvColQtySold, Source={x:Static core:LocalizationService.Instance}}" Width="90" SortMemberPath="QuantitySold">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding QuantitySold}"
@@ -193,7 +125,7 @@
                         </DataGridTemplateColumn>
 
                         <!-- QTY Remaining + progress bar -->
-                        <DataGridTemplateColumn Header="REMAINING" Width="140" SortMemberPath="QuantityRemaining">
+                        <DataGridTemplateColumn Header="{Binding InvColRemaining, Source={x:Static core:LocalizationService.Instance}}" Width="140" SortMemberPath="QuantityRemaining">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel VerticalAlignment="Center">
@@ -206,7 +138,7 @@
                                                     <Style.Triggers>
                                                         <DataTrigger Binding="{Binding IsExhausted}" Value="True">
                                                             <Setter Property="Foreground" Value="{StaticResource ErrorBrush}"/>
-                                                            <Setter Property="Text" Value="DEPLETED"/>
+                                                            <Setter Property="Text" Value="{Binding InvDepleted, Source={x:Static core:LocalizationService.Instance}}"/>
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
@@ -223,7 +155,7 @@
                         </DataGridTemplateColumn>
 
                         <!-- Remaining Value -->
-                        <DataGridTemplateColumn Header="LAYER VALUE" Width="120" SortMemberPath="RemainingValue">
+                        <DataGridTemplateColumn Header="{Binding InvColLayerValue, Source={x:Static core:LocalizationService.Instance}}" Width="120" SortMemberPath="RemainingValue">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding RemainingValue, StringFormat={}{0:C2}}"
@@ -264,7 +196,7 @@
                         <Border.RenderTransform>
                             <ScaleTransform ScaleX="1" ScaleY="1"/>
                         </Border.RenderTransform>
-                        <TextBlock Text="RECEIVE STOCK" FontFamily="Manrope, Segoe UI" FontSize="18" FontWeight="Bold"
+                        <TextBlock Text="{Binding InvReceiveStock, Source={x:Static core:LocalizationService.Instance}}" FontFamily="Manrope, Segoe UI" FontSize="18" FontWeight="Bold"
                                    Foreground="White"
                                    HorizontalAlignment="Center" VerticalAlignment="Center"
                                    Margin="0,-2,0,0"/>

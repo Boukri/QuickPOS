@@ -143,7 +143,7 @@
                                             <TextBlock Grid.Row="2" HorizontalAlignment="Center"
                                                        FontFamily="Manrope, Segoe UI" FontSize="18" FontWeight="ExtraBold"
                                                        Foreground="{StaticResource PrimaryDarkBrush}"
-                                                       Text="{Binding RetailPrice, StringFormat={}{0:C}}"/>
+                                                       Text="{Binding ActualPrice, StringFormat={}{0:C}}"/>
                                             <!-- Unit cost (FIFO/LIFO/WAC): hidden for services or when cost is 0 -->
                                             <TextBlock Grid.Row="3" HorizontalAlignment="Center"
                                                        FontFamily="Inter, Segoe UI" FontSize="10" FontWeight="Bold"

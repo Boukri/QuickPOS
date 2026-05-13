@@ -23,8 +23,9 @@ internal class ProductConfig : IEntityTypeConfiguration<Product>
     public void Configure(EntityTypeBuilder<Product> builder)
     {
         builder.HasKey(p => p.Id);
-        builder.Property(p => p.WholesalePrice).HasColumnType("decimal(18,2)");
-        builder.Property(p => p.RetailPrice).HasColumnType("decimal(18,2)");
+        builder.Property(p => p.MinimumQuantityAlert).HasColumnType("decimal(18,2)");
+        builder.Property(p => p.ActualPrice).HasColumnType("decimal(18,2)");
+        builder.Property(p => p.ActualQuantity).HasColumnType("decimal(18,2)");
         builder.Property(p => p.CostingMethod)
                .HasConversion<string>()
                .HasMaxLength(20)

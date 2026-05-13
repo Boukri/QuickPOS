@@ -20,7 +20,8 @@ public partial class MainWindow : Window
     protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
     {
         base.OnClosing(e);
-        Application.Current.Shutdown();
+        if (DataContext is MainViewModel vm && !vm.IsLoggingOut)
+            Application.Current.Shutdown();
     }
 
     private void AnimateNav(double targetWidth)

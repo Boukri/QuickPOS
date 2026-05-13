@@ -80,3 +80,22 @@ public class NullToBoolConverter : IValueConverter
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         => throw new NotSupportedException();
 }
+
+public class GreaterThanZeroVisibilityConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (value is decimal decimalValue && decimalValue > 0)
+            return Visibility.Visible;
+        if (value is double doubleValue && doubleValue > 0)
+            return Visibility.Visible;
+        if (value is int intValue && intValue > 0)
+            return Visibility.Visible;
+        return Visibility.Collapsed;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}

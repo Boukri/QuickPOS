@@ -1,7 +1,8 @@
 <Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:local="clr-namespace:QuickPOS.Models.Enums"
-        x:Class="QuickPOS.Features.Inventory.Components.ReceiveStockDialog"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:local="clr-namespace:QuickPOS.Models.Enums"
+		xmlns:core="clr-namespace:QuickPOS.Core"
+		x:Class="QuickPOS.Features.Inventory.Components.ReceiveStockDialog"
         Title="Receive Stock"
         SizeToContent="WidthAndHeight"
         WindowStartupLocation="CenterOwner"
@@ -21,11 +22,11 @@
 			<!-- Header -->
 			<DockPanel Margin="0,0,0,20">
 				<StackPanel>
-					<TextBlock Text="RECEIVE STOCK" FontFamily="Inter, Segoe UI" FontSize="11"
-                               FontWeight="ExtraBold" Foreground="{StaticResource OnSurfaceVariantBrush}"/>
-					<TextBlock Text="Add a new inventory batch and update product pricing"
-                               FontFamily="Inter, Segoe UI" FontSize="12"
-                               Foreground="{StaticResource OutlineBrush}" Margin="0,2,0,0"/>
+					<TextBlock Text="{Binding InvReceiveStock, Source={x:Static core:LocalizationService.Instance}}" FontFamily="Inter, Segoe UI" FontSize="11"
+							   FontWeight="ExtraBold" Foreground="{StaticResource OnSurfaceVariantBrush}"/>
+					<TextBlock Text="{Binding InvReceiveStockSubtitle, Source={x:Static core:LocalizationService.Instance}}"
+							   FontFamily="Inter, Segoe UI" FontSize="12"
+							   Foreground="{StaticResource OutlineBrush}" Margin="0,2,0,0"/>
 				</StackPanel>
 				<Button DockPanel.Dock="Right" HorizontalAlignment="Right"
                         Content="&#x2715;" Width="32" Height="32"
@@ -34,7 +35,7 @@
 			</DockPanel>
 
 			<!-- Product selector -->
-			<TextBlock Text="PRODUCT" Style="{StaticResource FormLabelStyle}"/>
+			<TextBlock Text="{Binding InvColProduct, Source={x:Static core:LocalizationService.Instance}}" Style="{StaticResource FormLabelStyle}"/>
 			<ComboBox ItemsSource="{Binding Products}"
                       SelectedItem="{Binding SelectedProduct}"
                       Style="{StaticResource FormComboStyle}"
@@ -49,13 +50,13 @@
 				</Grid.ColumnDefinitions>
 
 				<StackPanel Grid.Column="0">
-					<TextBlock Text="QUANTITY RECEIVED" Style="{StaticResource FormLabelStyle}"/>
+					<TextBlock Text="{Binding InvFieldQtyReceived, Source={x:Static core:LocalizationService.Instance}}" Style="{StaticResource FormLabelStyle}"/>
 					<TextBox Text="{Binding ReceiveQuantity, UpdateSourceTrigger=PropertyChanged}"
                              Style="{StaticResource FormInputStyle}"/>
 				</StackPanel>
 
 				<StackPanel Grid.Column="2">
-					<TextBlock Text="PURCHASE PRICE" Style="{StaticResource FormLabelStyle}"/>
+					<TextBlock Text="{Binding InvFieldPurchasePrice, Source={x:Static core:LocalizationService.Instance}}" Style="{StaticResource FormLabelStyle}"/>
 					<TextBox Text="{Binding ReceiveUnitCost, UpdateSourceTrigger=PropertyChanged}"
                              Style="{StaticResource FormInputStyle}"/>
 				</StackPanel>
@@ -70,26 +71,26 @@
 				</Grid.ColumnDefinitions>
 
 				<StackPanel Grid.Column="0">
-					<TextBlock Text="SELLING PRICE" Style="{StaticResource FormLabelStyle}"/>
+					<TextBlock Text="{Binding InvFieldSellingPrice, Source={x:Static core:LocalizationService.Instance}}" Style="{StaticResource FormLabelStyle}"/>
 					<TextBox Text="{Binding ReceiveSellPrice, UpdateSourceTrigger=PropertyChanged}"
                              Style="{StaticResource FormInputStyle}"/>
 				</StackPanel>
 
 				<StackPanel Grid.Column="2">
-					<TextBlock Text="COSTING METHOD" Style="{StaticResource FormLabelStyle}"/>
+					<TextBlock Text="{Binding InvFieldCostingMethod, Source={x:Static core:LocalizationService.Instance}}" Style="{StaticResource FormLabelStyle}"/>
 					<ComboBox SelectedValue="{Binding ReceiveCostingMethod}"
                               SelectedValuePath="Tag"
                               Style="{StaticResource FormComboStyle}">
-						<ComboBoxItem Content="Weighted Average" Tag="{x:Static local:CostingMethod.WeightedAverage}"/>
-						<ComboBoxItem Content="FIFO"             Tag="{x:Static local:CostingMethod.Fifo}"/>
-						<ComboBoxItem Content="LIFO"             Tag="{x:Static local:CostingMethod.Lifo}"/>
+						<ComboBoxItem Content="{Binding CostingWeightedAverage, Source={x:Static core:LocalizationService.Instance}}" Tag="{x:Static local:CostingMethod.WeightedAverage}"/>
+						<ComboBoxItem Content="{Binding CostingFifo, Source={x:Static core:LocalizationService.Instance}}"            Tag="{x:Static local:CostingMethod.Fifo}"/>
+						<ComboBoxItem Content="{Binding CostingLifo, Source={x:Static core:LocalizationService.Instance}}"            Tag="{x:Static local:CostingMethod.Lifo}"/>
 
 					</ComboBox>
 				</StackPanel>
 			</Grid>
 
 			<!-- Reference / PO# -->
-			<TextBlock Text="REFERENCE / PO# (OPTIONAL)" Style="{StaticResource FormLabelStyle}"/>
+			<TextBlock Text="{Binding InvFieldReference, Source={x:Static core:LocalizationService.Instance}}" Style="{StaticResource FormLabelStyle}"/>
 			<TextBox Text="{Binding ReceiveReference, UpdateSourceTrigger=PropertyChanged}"
                      Style="{StaticResource FormInputStyle}"
                      Margin="0,0,0,28"/>
@@ -101,12 +102,12 @@
 					<ColumnDefinition Width="12"/>
 					<ColumnDefinition Width="*"/>
 				</Grid.ColumnDefinitions>
-				<Button Grid.Column="0" Content="CANCEL"
-                        Style="{StaticResource SecondaryButtonStyle}"
-                        Height="48" Click="Cancel_Click"/>
-				<Button Grid.Column="2" Content="SAVE BATCH"
-                        Style="{StaticResource PrimaryButtonStyle}"
-                        Height="48" Command="{Binding ConfirmReceiveStockCommand}"/>
+				<Button Grid.Column="0" Content="{Binding Cancel, Source={x:Static core:LocalizationService.Instance}}"
+						Style="{StaticResource SecondaryButtonStyle}"
+						Height="48" Click="Cancel_Click"/>
+				<Button Grid.Column="2" Content="{Binding InvSaveBatch, Source={x:Static core:LocalizationService.Instance}}"
+						Style="{StaticResource PrimaryButtonStyle}"
+						Height="48" Command="{Binding ConfirmReceiveStockCommand}"/>
 			</Grid>
 
 		</StackPanel>

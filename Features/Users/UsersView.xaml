@@ -3,128 +3,33 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:fa="https://dsaladin.dev/products/fontawesome/wpf/xaml"
+             xmlns:core="clr-namespace:QuickPOS.Core"
              mc:Ignorable="d"
              d:DesignHeight="800" d:DesignWidth="1100"
              Background="{StaticResource SurfaceBrush}">
     <Grid>
         <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <StackPanel Margin="40">
+            <StackPanel Margin="20">
 
                 <!--  Header -->
                 <DockPanel Margin="0,0,0,40">
                     <StackPanel>
-                        <TextBlock Text="Staff Directory" FontFamily="Manrope, Segoe UI" FontSize="42"
+                        <TextBlock Text="{Binding UsersStaffDirectory, Source={x:Static core:LocalizationService.Instance}}" FontFamily="Manrope, Segoe UI" FontSize="42"
                                    FontWeight="ExtraBold" Foreground="{StaticResource OnSurfaceBrush}"
                                    Margin="0,0,0,4"/>
-                        <TextBlock Text="Manage roles and permissions for your clinical team members."
-                                   FontFamily="Inter, Segoe UI" FontSize="14" FontWeight="Medium"
-                                   Foreground="{StaticResource OnSurfaceVariantBrush}"/>
+                            <TextBlock Text="{Binding UsersStaffSubtitle, Source={x:Static core:LocalizationService.Instance}}"
+                                       FontFamily="Inter, Segoe UI" FontSize="14" FontWeight="Medium"
+                                       Foreground="{StaticResource OnSurfaceVariantBrush}"/>
                     </StackPanel>
                     <Button DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Top"
                             Command="{Binding ShowAddFormCommand}"
                             Style="{StaticResource PrimaryButtonStyle}" Height="56" Padding="32,0">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="??" FontSize="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                            <TextBlock Text="Invite New User" FontWeight="Bold" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding UsersInviteNew, Source={x:Static core:LocalizationService.Instance}}" FontWeight="Bold" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Button>
                 </DockPanel>
-
-                <!--  Stats Bento -->
-                <Grid Margin="0,0,0,40">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="24"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="24"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <!-- Total Staff -->
-                    <Border Grid.Column="0" Background="{StaticResource SurfaceLowestBrush}" CornerRadius="12"
-                            Padding="32" MinHeight="176">
-                        <DockPanel>
-                            <DockPanel DockPanel.Dock="Top">
-                                <TextBlock FontFamily="Inter, Segoe UI" FontSize="11" FontWeight="ExtraBold"
-                                           Foreground="{StaticResource OnSurfaceVariantBrush}" Text="TOTAL STAFF"/>
-                                <Border DockPanel.Dock="Right" HorizontalAlignment="Right"
-                                        Padding="8" CornerRadius="8">
-                                    <Border.Background>
-                                        <SolidColorBrush Color="{StaticResource PrimaryColor}" Opacity="0.1"/>
-                                    </Border.Background>
-                                    <TextBlock Text="??" FontSize="18" HorizontalAlignment="Center"/>
-                                </Border>
-                            </DockPanel>
-                            <DockPanel VerticalAlignment="Bottom">
-                                <TextBlock FontFamily="Manrope, Segoe UI" FontSize="42" FontWeight="ExtraBold"
-                                           Foreground="{StaticResource PrimaryDarkBrush}"
-                                           Text="{Binding Users.Count}"/>
-                                <Border DockPanel.Dock="Right" HorizontalAlignment="Right"
-                                        Background="{StaticResource PrimaryFixedBrush}" CornerRadius="12"
-                                        Padding="12,4" VerticalAlignment="Bottom">
-                                    <TextBlock FontFamily="Inter, Segoe UI" FontSize="12" FontWeight="Bold"
-                                               Foreground="{StaticResource PrimaryDarkBrush}" Text="+2 this month"/>
-                                </Border>
-                            </DockPanel>
-                        </DockPanel>
-                    </Border>
-
-                    <!-- Active Shifts -->
-                    <Border Grid.Column="2" Background="{StaticResource SurfaceLowestBrush}" CornerRadius="12"
-                            Padding="32" MinHeight="176">
-                        <DockPanel>
-                            <DockPanel DockPanel.Dock="Top">
-                                <TextBlock FontFamily="Inter, Segoe UI" FontSize="11" FontWeight="ExtraBold"
-                                           Foreground="{StaticResource OnSurfaceVariantBrush}" Text="ACTIVE NOW"/>
-                                <Border DockPanel.Dock="Right" HorizontalAlignment="Right"
-                                        Padding="8" CornerRadius="8" Background="#10515F74">
-                                    <TextBlock Text="??" FontSize="18"/>
-                                </Border>
-                            </DockPanel>
-                            <DockPanel VerticalAlignment="Bottom">
-                                <TextBlock FontFamily="Manrope, Segoe UI" FontSize="42" FontWeight="ExtraBold"
-                                           Foreground="#515F74" Text="08"/>
-                                <Border DockPanel.Dock="Right" HorizontalAlignment="Right"
-                                        Background="#D5E3FC" CornerRadius="12" Padding="12,4"
-                                        VerticalAlignment="Bottom">
-                                    <TextBlock FontFamily="Inter, Segoe UI" FontSize="12" FontWeight="Bold"
-                                               Foreground="#57657A" Text="On Floor Now"/>
-                                </Border>
-                            </DockPanel>
-                        </DockPanel>
-                    </Border>
-
-                    <!-- Pending Invites -->
-                    <Border Grid.Column="4" CornerRadius="12" Padding="32" MinHeight="176"
-                            BorderBrush="{StaticResource TertiaryBrush}" BorderThickness="0,0,0,4">
-                        <Border.Background>
-                            <SolidColorBrush Color="{StaticResource TertiaryContainerColor}" Opacity="0.1"/>
-                        </Border.Background>
-                        <DockPanel>
-                            <DockPanel DockPanel.Dock="Top">
-                                <TextBlock FontFamily="Inter, Segoe UI" FontSize="11" FontWeight="ExtraBold"
-                                           Foreground="{StaticResource TertiaryBrush}" Text="PENDING INVITES"/>
-                                <Border DockPanel.Dock="Right" HorizontalAlignment="Right"
-                                        Padding="8" CornerRadius="8">
-                                    <Border.Background>
-                                        <SolidColorBrush Color="{StaticResource TertiaryColor}" Opacity="0.1"/>
-                                    </Border.Background>
-                                    <TextBlock Text="??" FontSize="18"/>
-                                </Border>
-                            </DockPanel>
-                            <DockPanel VerticalAlignment="Bottom">
-                                <TextBlock FontFamily="Manrope, Segoe UI" FontSize="42" FontWeight="ExtraBold"
-                                           Foreground="{StaticResource TertiaryBrush}" Text="03"/>
-                                <Border DockPanel.Dock="Right" HorizontalAlignment="Right"
-                                        Background="{StaticResource TertiaryContainerBrush}" CornerRadius="12"
-                                        Padding="12,4" VerticalAlignment="Bottom">
-                                    <TextBlock FontFamily="Inter, Segoe UI" FontSize="12" FontWeight="Bold"
-                                               Foreground="White" Text="Awaiting Response"/>
-                                </Border>
-                            </DockPanel>
-                        </DockPanel>
-                    </Border>
-                </Grid>
 
                 <!--  Staff Table -->
                 <Border Background="{StaticResource SurfaceLowBrush}" CornerRadius="12">
@@ -132,14 +37,11 @@
                         <!-- Table Header Bar -->
                         <Border DockPanel.Dock="Top" Background="White" Padding="32,20" CornerRadius="12,12,0,0">
                             <DockPanel>
-                                <TextBlock Text="Team Members" FontFamily="Manrope, Segoe UI" FontSize="18"
+                                <TextBlock Text="{Binding UsersTeamMembers, Source={x:Static core:LocalizationService.Instance}}" FontFamily="Manrope, Segoe UI" FontSize="18"
                                            FontWeight="Bold" Foreground="#0F766E" VerticalAlignment="Center"/>
                                 <StackPanel DockPanel.Dock="Right" HorizontalAlignment="Right"
                                             Orientation="Horizontal">
-                                    <Button Content="?? Filter" Style="{StaticResource LinkButtonStyle}"
-                                            Foreground="{StaticResource OnSurfaceVariantBrush}" Margin="0,0,16,0"/>
-                                    <Button Content="? Sort" Style="{StaticResource LinkButtonStyle}"
-                                            Foreground="{StaticResource OnSurfaceVariantBrush}"/>
+                                    
                                 </StackPanel>
                             </DockPanel>
                         </Border>
@@ -152,9 +54,13 @@
                                 <TextBlock FontFamily="Inter, Segoe UI" FontSize="12" FontStyle="Italic"
                                            Foreground="{StaticResource OnSurfaceVariantBrush}"
                                            VerticalAlignment="Center">
-                                    <Run Text="Showing"/>
-                                    <Run Text="{Binding Users.Count, Mode=OneWay}"/>
-                                    <Run Text="staff members"/>
+									<TextBlock.Text>
+										<MultiBinding StringFormat="{}{0} {1} {2}">
+											<Binding Path="Showing"          Source="{x:Static core:LocalizationService.Instance}" />
+											<Binding Path="Users.Count" />
+											<Binding Path="UsersStaffMembers" Source="{x:Static core:LocalizationService.Instance}" />
+										</MultiBinding>
+									</TextBlock.Text>
                                 </TextBlock>
                             </DockPanel>
                         </Border>
@@ -269,14 +175,19 @@
                                             </StackPanel>
 
                                             <!-- Actions -->
-                                            <StackPanel Grid.Column="4" Orientation="Horizontal" VerticalAlignment="Center">
-                                                <Button Content="?" Style="{StaticResource TableEditButtonStyle}"
-                                                        Command="{Binding DataContext.EditUserCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                        CommandParameter="{Binding}"/>
-                                                <Button Content="??" Style="{StaticResource TableEditButtonStyle}"
-                                                        Command="{Binding DataContext.DeleteUserCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                        CommandParameter="{Binding}" Margin="4,0,0,0"/>
-                                            </StackPanel>
+                                                <StackPanel Grid.Column="4" Orientation="Horizontal" VerticalAlignment="Center">
+													<Button Style="{StaticResource TableEditButtonStyle}"
+                                                            Command="{Binding DataContext.EditUserCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                            CommandParameter="{Binding}">
+														<fa:FontAwesomeImage Icon="RegularPenToSquare" Foreground="{StaticResource SuccessBrush}" Width="25"/>
+													</Button>
+													<Button Style="{StaticResource TableEditButtonStyle}"
+																		Command="{Binding DataContext.RequestDeleteUserCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+																		CommandParameter="{Binding}" Margin="4,0,0,0"
+																		Visibility="{Binding CanDelete, Converter={StaticResource BoolToVisConverter}}">
+														<fa:FontAwesomeImage Icon="SolidXmark"   Foreground="{StaticResource ErrorBrush}"  Width="25" />
+													</Button>
+                                                </StackPanel>
                                         </Grid>
                                     </Border>
                                 </DataTemplate>
@@ -289,6 +200,45 @@
 
         <!--  Add/Edit Form Modal -->
         <Border Background="#80000000"
+                Visibility="{Binding IsDeleteConfirmVisible, Converter={StaticResource BoolToVisConverter}}">
+            <Border Background="White" CornerRadius="12" Width="420" VerticalAlignment="Center"
+                    HorizontalAlignment="Center" Padding="40">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="40" Opacity="0.15" ShadowDepth="0"/>
+                </Border.Effect>
+                <StackPanel>
+                    <TextBlock Text="{Binding ConfirmDeletion, Source={x:Static core:LocalizationService.Instance}}"
+                               FontFamily="Manrope, Segoe UI" FontSize="20" FontWeight="ExtraBold"
+                               Foreground="{StaticResource OnSurfaceBrush}" TextAlignment="Center" Margin="0,0,0,8"/>
+                    <TextBlock Text="{Binding DeleteWarning, Source={x:Static core:LocalizationService.Instance}}"
+                               FontFamily="Inter, Segoe UI" FontSize="13" Foreground="{StaticResource OnSurfaceVariantBrush}"
+                               TextWrapping="Wrap" TextAlignment="Center" Margin="0,0,0,32"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="16"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="0"
+                                Content="{Binding Cancel, Source={x:Static core:LocalizationService.Instance}}"
+                                Command="{Binding CancelDeleteUserCommand}"
+                                Style="{StaticResource SecondaryButtonStyle}"/>
+                        <Button Grid.Column="2"
+                                Content="{Binding Confirm, Source={x:Static core:LocalizationService.Instance}}"
+                                Command="{Binding ConfirmDeleteUserCommand}">
+                            <Button.Style>
+                                <Style TargetType="Button" BasedOn="{StaticResource PrimaryButtonStyle}">
+                                    <Setter Property="Background" Value="{StaticResource ErrorBrush}"/>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </Grid>
+                </StackPanel>
+            </Border>
+        </Border>
+
+        <!--  Add/Edit Form Modal -->
+        <Border Background="#80000000"
                 Visibility="{Binding IsFormVisible, Converter={StaticResource BoolToVisConverter}}">
             <Border Background="White" CornerRadius="16" Width="440" VerticalAlignment="Center"
                     HorizontalAlignment="Center" Padding="32">
@@ -296,27 +246,50 @@
                     <DropShadowEffect BlurRadius="40" Opacity="0.15" ShadowDepth="0"/>
                 </Border.Effect>
                 <StackPanel>
-                    <TextBlock Text="User Details" FontFamily="Manrope, Segoe UI" FontSize="22" FontWeight="ExtraBold"
+                    <TextBlock Text="{Binding FormTitle}" FontFamily="Manrope, Segoe UI" FontSize="22" FontWeight="ExtraBold"
                                Foreground="{StaticResource OnSurfaceBrush}" Margin="0,0,0,24"/>
 
-                    <TextBlock Text="FULL NAME" Style="{StaticResource FormLabelStyle}"/>
+                    <TextBlock Text="{Binding UsersFieldFullName, Source={x:Static core:LocalizationService.Instance}}" Style="{StaticResource FormLabelStyle}"/>
                     <TextBox Text="{Binding FormFullName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FormInputStyle}"/>
 
-                    <TextBlock Text="EMAIL" Style="{StaticResource FormLabelStyle}"/>
+                    <TextBlock Text="{Binding UsersFieldEmail, Source={x:Static core:LocalizationService.Instance}}" Style="{StaticResource FormLabelStyle}"/>
                     <TextBox Text="{Binding FormEmail, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FormInputStyle}"/>
 
-                    <TextBlock Text="ROLE" Style="{StaticResource FormLabelStyle}"/>
-                    <ComboBox ItemsSource="{Binding Roles}" SelectedItem="{Binding FormRole}"
-                              Style="{StaticResource FormComboStyle}"/>
+                    <TextBlock Text="PASSWORD" Style="{StaticResource FormLabelStyle}"/>
+                    <TextBox Text="{Binding FormPassword, UpdateSourceTrigger=PropertyChanged}"
+                             Style="{StaticResource FormInputStyle}"
+                             Tag="Leave blank to keep current password"/>
 
-                    <TextBlock Text="STATUS" Style="{StaticResource FormLabelStyle}"/>
+                    <TextBlock Text="{Binding UsersFieldStatus, Source={x:Static core:LocalizationService.Instance}}" Style="{StaticResource FormLabelStyle}"/>
                     <ComboBox ItemsSource="{Binding Statuses}" SelectedItem="{Binding FormStatus}"
                               Style="{StaticResource FormComboStyle}"/>
 
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
-                        <Button Content="Cancel" Command="{Binding CancelFormCommand}"
+                    <!-- Nav-access permission checkboxes -->
+                    <TextBlock Text="{Binding UsersFieldPermissions, Source={x:Static core:LocalizationService.Instance}}" Style="{StaticResource FormLabelStyle}"/>
+                    <Border Background="{StaticResource SurfaceLowBrush}" CornerRadius="10"
+                            Padding="16,10" Margin="0,0,0,16">
+                        <ItemsControl ItemsSource="{Binding FormPermissions}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="2"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox Content="{Binding DisplayName}"
+                                              IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                                              FontFamily="Inter, Segoe UI" FontSize="13"
+                                              Foreground="{StaticResource OnSurfaceBrush}"
+                                              Margin="0,5,0,5" Cursor="Hand"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Border>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
+                        <Button Content="{Binding Cancel,     Source={x:Static core:LocalizationService.Instance}}" Command="{Binding CancelFormCommand}"
                                 Style="{StaticResource SecondaryButtonStyle}" Width="120" Height="44" Margin="0,0,12,0"/>
-                        <Button Content="Save" Command="{Binding SaveUserCommand}"
+                        <Button Content="{Binding UsersSave,  Source={x:Static core:LocalizationService.Instance}}" Command="{Binding SaveUserCommand}"
                                 Style="{StaticResource PrimaryButtonStyle}" Width="120" Height="44"/>
                     </StackPanel>
                 </StackPanel>

@@ -63,10 +63,12 @@
                     </RadioButton>
                     <RadioButton Style="{StaticResource NavRadioStyle}"
                                  IsChecked="{Binding CurrentNavIndex, Converter={StaticResource EqualityConverter}, ConverterParameter=5}"
-                                 Command="{Binding NavigateToInventoryCommand}">
+                                 Command="{Binding NavigateToInventoryCommand}"
+                                  Visibility="{Binding CanAccessInventory, Converter={StaticResource BoolToVisConverter}}"
+                                 ToolTip="{Binding Loc.NavInventory}">
                         <StackPanel Orientation="Horizontal">
                             <fa:FontAwesomeImage Icon="SolidLayerGroup" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Height="15" VerticalAlignment="Center"/>
-                            <TextBlock Text="Inventory" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding Loc.NavInventory}" Margin="10,0,0,0" VerticalAlignment="Center"/>
                         </StackPanel>
                     </RadioButton>
                     <RadioButton Style="{StaticResource NavRadioStyle}"
@@ -80,16 +82,6 @@
                         </StackPanel>
                     </RadioButton>
                     <RadioButton Style="{StaticResource NavRadioStyle}"
-                                 IsChecked="{Binding CurrentNavIndex, Converter={StaticResource EqualityConverter}, ConverterParameter=3}"
-                                 Command="{Binding NavigateToUsersCommand}"
-                                 ToolTip="{Binding Loc.NavUsers}"
-                                 Visibility="{Binding CanAccessUsers, Converter={StaticResource BoolToVisConverter}}">
-                        <StackPanel Orientation="Horizontal">
-                            <fa:FontAwesomeImage Icon="SolidUsers" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Height="15" VerticalAlignment="Center"/>
-                            <TextBlock Text="{Binding Loc.NavUsers}" Margin="10,0,0,0" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </RadioButton>
-                    <RadioButton Style="{StaticResource NavRadioStyle}"
                                  IsChecked="{Binding CurrentNavIndex, Converter={StaticResource EqualityConverter}, ConverterParameter=4}"
                                  Command="{Binding NavigateToDailyCloseCommand}"
                                  ToolTip="{Binding Loc.NavDailyClose}"
@@ -97,6 +89,16 @@
                         <StackPanel Orientation="Horizontal">
                             <fa:FontAwesomeImage Icon="SolidCalendarCheck" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Height="15" VerticalAlignment="Center"/>
                             <TextBlock Text="{Binding Loc.NavDailyClose}" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton Style="{StaticResource NavRadioStyle}"
+                                 IsChecked="{Binding CurrentNavIndex, Converter={StaticResource EqualityConverter}, ConverterParameter=3}"
+                                 Command="{Binding NavigateToUsersCommand}"
+                                 ToolTip="{Binding Loc.NavUsers}"
+                                 Visibility="{Binding CanAccessUsers, Converter={StaticResource BoolToVisConverter}}">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:FontAwesomeImage Icon="SolidUsers" Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}" Height="15" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding Loc.NavUsers}" Margin="10,0,0,0" VerticalAlignment="Center"/>
                         </StackPanel>
                     </RadioButton>
                 </StackPanel>
@@ -131,7 +133,7 @@
             <!-- Top Navigation Bar -->
             <Border DockPanel.Dock="Top" Background="White" Height="60"
                     BorderBrush="#E6E8EA" BorderThickness="0,0,0,1">
-                <DockPanel Margin="24,0">
+                <DockPanel Margin="4,0">
                     <!-- Burger Toggle Button -->
                     <ToggleButton x:Name="NavToggle" VerticalAlignment="Center" Margin="0,0,16,0"
                                   IsChecked="False" Cursor="Hand">
@@ -170,7 +172,7 @@
             </Border>
 
             <!-- Content -->
-            <ContentControl Content="{Binding Navigation.CurrentViewModel}">
+            <ContentControl Content="{Binding Navigation.CurrentViewModel}" >
                 <ContentControl.Resources>
                     <DataTemplate DataType="{x:Type selling:SellingViewModel}">
                         <selling:SellingView/>

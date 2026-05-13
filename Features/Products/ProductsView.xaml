@@ -5,12 +5,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:fa="https://dsaladin.dev/products/fontawesome/wpf/xaml"
              xmlns:local="clr-namespace:QuickPOS.Models.Enums"
+             xmlns:core="clr-namespace:QuickPOS.Core"
              mc:Ignorable="d"
              d:DesignHeight="800" d:DesignWidth="1100"
              Background="{StaticResource SurfaceBrush}">
     <Grid>
         <!-- Main content -->
-        <Grid Margin="40">
+        <Grid Margin="20">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -18,80 +19,13 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-
-            <!--   Stats / Bento Row   -->
-            <Grid Grid.Row="1" Margin="0,0,0,30">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="24"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="24"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <!-- Total SKU -->
-                <Border Grid.Column="0" Background="{StaticResource SurfaceLowestBrush}" CornerRadius="12"
-                        Padding="20" Height="100">
-                    <StackPanel>
-                        <TextBlock  FontFamily="Inter, Segoe UI" FontSize="11" FontWeight="ExtraBold"
-                                   Foreground="{StaticResource OnSurfaceVariantBrush}"
-                                   Text="TOTAL SKU"/>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" 
-                                    HorizontalAlignment="Stretch">
-                            <TextBlock FontFamily="Manrope, Segoe UI" FontSize="36" FontWeight="ExtraBold"
-                                       Foreground="{StaticResource PrimaryDarkBrush}"
-                                       Text="{Binding Products.Count}" VerticalAlignment="Bottom"/>
-                            <TextBlock FontFamily="Inter, Segoe UI" FontSize="13" FontWeight="Bold"
-                                       Foreground="#0D9488" VerticalAlignment="Bottom"
-                                       Margin="5,0,0,4" Text="items"/>
-                        </StackPanel>
-                    </StackPanel>
-                </Border>
-
-                <!-- Category Count -->
-                <Border Grid.Column="2" Background="{StaticResource SurfaceLowestBrush}" CornerRadius="12"
-                        Padding="24" Height="100">
-                    <StackPanel>
-                        <TextBlock DockPanel.Dock="Top" FontFamily="Inter, Segoe UI" FontSize="11" FontWeight="ExtraBold"
-                                   Foreground="{StaticResource OnSurfaceVariantBrush}"
-                                   Text="CATEGORIES"/>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
-                            <TextBlock FontFamily="Manrope, Segoe UI" FontSize="36" FontWeight="ExtraBold"
-                                       Foreground="{StaticResource TertiaryBrush}"
-                                       Text="{Binding CategoryRows.Count}" VerticalAlignment="Bottom"/>
-                            <TextBlock FontFamily="Inter, Segoe UI" FontSize="13" FontWeight="Bold"
-                                       Foreground="{StaticResource TertiaryContainerBrush}" VerticalAlignment="Bottom"
-                                       Margin="12,0,0,4" Text="active"/>
-                        </StackPanel>
-                    </StackPanel>
-                </Border>
-
-                <!-- Low Stock -->
-                <Border Grid.Column="4" Background="{StaticResource SurfaceLowestBrush}" CornerRadius="12"
-                        Padding="24" Height="100">
-                    <StackPanel>
-                        <TextBlock DockPanel.Dock="Top" FontFamily="Inter, Segoe UI" FontSize="11" FontWeight="ExtraBold"
-                                   Foreground="{StaticResource OnSurfaceVariantBrush}"
-                                   Text="LOW STOCK"/>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
-                            <TextBlock FontFamily="Manrope, Segoe UI" FontSize="36" FontWeight="ExtraBold"
-                                       Foreground="{StaticResource ErrorBrush}"
-                                       Text="{Binding CategoryRows.Count}" VerticalAlignment="Bottom"/>
-                            <TextBlock FontFamily="Inter, Segoe UI" FontSize="13" FontWeight="Bold"
-                                       Foreground="{StaticResource ErrorContainerBrush}" VerticalAlignment="Bottom"
-                                       Margin="12,0,0,4" Text="Items    "/>
-                        </StackPanel>
-                    </StackPanel>
-                </Border>
-            </Grid>
-
             <!--   Tabs   -->
             <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,0">
-                <RadioButton Content="PRODUCTS" GroupName="ProductTabs"
+                <RadioButton Content="{Binding Loc.Products, Mode=OneWay}" GroupName="ProductTabs"
                              Style="{StaticResource TabPillStyle}"
                              IsChecked="{Binding ActiveTab, Converter={StaticResource EqualityConverter}, ConverterParameter=0}"
                              Command="{Binding SwitchToProductsTabCommand}"/>
-                <RadioButton Content="CATEGORIES" GroupName="ProductTabs"
+                <RadioButton Content="{Binding Loc.Categories, Mode=OneWay}" GroupName="ProductTabs"
                              Style="{StaticResource TabPillStyle}"
                              IsChecked="{Binding ActiveTab, Converter={StaticResource EqualityConverter}, ConverterParameter=1}"
                              Command="{Binding SwitchToCategoriesTabCommand}"/>
@@ -133,7 +67,7 @@
                             </DataGrid.ColumnHeaderStyle>
                             <DataGrid.Columns>
                                 <!-- Item Name -->
-                                <DataGridTemplateColumn Header="ITEM NAME" Width="*">
+                                <DataGridTemplateColumn Header="{Binding ColItemName, Source={x:Static core:LocalizationService.Instance}}" Width="*">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
@@ -171,7 +105,7 @@
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
                                 <!-- Category Pill -->
-                                <DataGridTemplateColumn Header="CATEGORY" Width="140">
+                                <DataGridTemplateColumn Header="{Binding ColCategory, Source={x:Static core:LocalizationService.Instance}}" Width="140">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <Border CornerRadius="12" Padding="12,4" HorizontalAlignment="Left"
@@ -203,7 +137,7 @@
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
                                 <!-- Wholesale -->
-                                <DataGridTemplateColumn Header="WHOLESALE" Width="110">
+                                <DataGridTemplateColumn Header="{Binding ColWholesale, Source={x:Static core:LocalizationService.Instance}}" Width="110">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding WholesalePrice, StringFormat=\{0:C2\}}" 
@@ -214,7 +148,7 @@
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
                                 <!-- Retail -->
-                                <DataGridTemplateColumn Header="RETAIL" Width="110">
+                                <DataGridTemplateColumn Header="{Binding ColRetail, Source={x:Static core:LocalizationService.Instance}}" Width="110">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding RetailPrice, StringFormat=\{0:C2\}}" 
@@ -225,7 +159,7 @@
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
                                 <!-- Costing Method -->
-                                <DataGridTemplateColumn Header="COSTING" Width="120">
+                                <DataGridTemplateColumn Header="{Binding ColCosting, Source={x:Static core:LocalizationService.Instance}}" Width="120">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding CostingMethod}" 
@@ -236,7 +170,7 @@
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
                                 <!-- Profit Margin -->
-                                <DataGridTemplateColumn Header="PROFIT MARGIN" Width="120">
+                                <DataGridTemplateColumn Header="{Binding ColMargin, Source={x:Static core:LocalizationService.Instance}}" Width="120">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding ProfitMargin, StringFormat=\{0:F1\}%}" 
@@ -247,7 +181,7 @@
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
                                 <!-- Actions -->
-                                <DataGridTemplateColumn Header="ACTIONS" Width="100">
+                                <DataGridTemplateColumn Header="{Binding ColActions, Source={x:Static core:LocalizationService.Instance}}" Width="100">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
@@ -283,7 +217,7 @@
                     </Grid>
                 </Border>
 
-                <!-- ??? Categories Tab ??? -->
+                <!-- Categories Tab -->
                 <Border Background="{StaticResource SurfaceLowBrush}" CornerRadius="12"
                         Visibility="{Binding ActiveTab, Converter={StaticResource IntEqualsToVisConverter}, ConverterParameter=1}">
                     <Grid>
@@ -316,7 +250,7 @@
                             </DataGrid.ColumnHeaderStyle>
                             <DataGrid.Columns>
                                 <!-- Name -->
-                                <DataGridTemplateColumn Header="CATEGORY NAME" Width="*">
+                                <DataGridTemplateColumn Header="{Binding ColName, Source={x:Static core:LocalizationService.Instance}}" Width="*">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Name}" FontFamily="Inter, Segoe UI" FontWeight="Bold"
@@ -326,7 +260,7 @@
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
                                 <!-- Type -->
-                                <DataGridTemplateColumn Header="TYPE" Width="140">
+                                <DataGridTemplateColumn Header="{Binding ColType, Source={x:Static core:LocalizationService.Instance}}" Width="140">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <Border CornerRadius="12" Padding="12,4" HorizontalAlignment="Left"
@@ -360,7 +294,7 @@
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
                                 <!-- Product Count -->
-                                <DataGridTemplateColumn Header="PRODUCTS" Width="120">
+                                <DataGridTemplateColumn Header="{Binding ColProductCount, Source={x:Static core:LocalizationService.Instance}}" Width="120">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock FontFamily="Inter, Segoe UI" FontWeight="Bold"
@@ -373,16 +307,22 @@
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
                                 <!-- Actions -->
-                                <DataGridTemplateColumn Header="ACTIONS" Width="100">
+                                <DataGridTemplateColumn Header="{Binding ColActions, Source={x:Static core:LocalizationService.Instance}}" Width="100">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                                                <Button Content="??" Style="{StaticResource TableEditButtonStyle}"
+                                                <Button Style="{StaticResource TableEditButtonStyle}"
                                                         Command="{Binding DataContext.EditCategoryCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                        CommandParameter="{Binding}"/>
-                                                <Button Content="???" Style="{StaticResource TableEditButtonStyle}"
+                                                        CommandParameter="{Binding}"
+                                                        Margin="20,0" Width="20">
+                                                    <fa:FontAwesomeImage Icon="RegularPenToSquare" Foreground="{StaticResource SuccessBrush}"/>
+                                                </Button>
+                                                <Button Style="{StaticResource TableEditButtonStyle}"
                                                         Command="{Binding DataContext.RequestDeleteCategoryCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                        CommandParameter="{Binding}" Margin="4,0,0,0"/>
+                                                        CommandParameter="{Binding}"
+                                                        Margin="20,0" Width="20">
+                                                    <fa:FontAwesomeImage Icon="SolidXmark" Width="18" Foreground="{StaticResource ErrorBrush}"/>
+                                                </Button>
                                             </StackPanel>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
@@ -408,7 +348,7 @@
         <!-- Floating Action Button -->
         <Button Width="64" Height="64"
                 HorizontalAlignment="Right" VerticalAlignment="Bottom"
-                Margin="0,0,40,40"
+                Margin="0,0,50,50"
                 Cursor="Hand">
             <Button.Style>
                 <Style TargetType="Button">
@@ -424,7 +364,7 @@
             </Button.Style>
             <Button.Template>
                 <ControlTemplate TargetType="Button">
-                    <Border x:Name="fabBorder" Width="64" Height="64" CornerRadius="32"
+                    <Border x:Name="fabBorder" Width="54" Height="54" CornerRadius="32"
                             RenderTransformOrigin="0.5,0.5">
                         <Border.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
@@ -439,10 +379,16 @@
                         <Border.RenderTransform>
                             <ScaleTransform ScaleX="1" ScaleY="1"/>
                         </Border.RenderTransform>
-                        <TextBlock Text="+" FontFamily="Manrope, Segoe UI" FontSize="30" FontWeight="Bold"
+                        <fa:FontAwesomeImage Icon="SolidPlus"
+                                             Foreground="White"
+                                             HorizontalAlignment="Center"
+                                             VerticalAlignment="Center"
+                                             Width="15" Height="15"
+                                             Margin="0,-2,0,0"/>
+                        <!--<TextBlock Text="+" FontFamily="Manrope, Segoe UI" FontSize="30" FontWeight="Bold"
                                    Foreground="White"
                                    HorizontalAlignment="Center" VerticalAlignment="Center"
-                                   Margin="0,-2,0,0"/>
+                                   Margin="0,-2,0,0"/>-->
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
@@ -464,7 +410,7 @@
             </Button.Template>
         </Button>
 
-        <!-- PRODUCT Add/Edit Drawer (Glassmorphism Overlay)            -->
+        <!-- PRODUCT Add/Edit Drawer (Glassmorphism Overlay) -->
         <Border Background="#40191C1E"
                 Visibility="{Binding IsFormVisible, Converter={StaticResource BoolToVisConverter}}">
             <Border Background="White" CornerRadius="12" Width="450" VerticalAlignment="Stretch"
@@ -475,12 +421,25 @@
                 <DockPanel>
                     <!-- Header -->
                     <DockPanel DockPanel.Dock="Top" Margin="0,0,0,40">
-                        <TextBlock Text="Edit Item" FontFamily="Manrope, Segoe UI" FontSize="24" FontWeight="ExtraBold" 
-                                   Foreground="{StaticResource OnSurfaceBrush}"/>
-                        <Button DockPanel.Dock="Right" HorizontalAlignment="Right" Content="?"
+                        <TextBlock FontFamily="Manrope, Segoe UI" FontSize="24" FontWeight="ExtraBold" 
+                                   Foreground="{StaticResource OnSurfaceBrush}">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Text" Value="{Binding AddItem, Source={x:Static core:LocalizationService.Instance}}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsProductEditing}" Value="True">
+                                            <Setter Property="Text" Value="{Binding EditItem, Source={x:Static core:LocalizationService.Instance}}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <Button DockPanel.Dock="Right" HorizontalAlignment="Right" 
                                 Command="{Binding CancelFormCommand}"
                                 Width="40" Height="40" FontSize="16"
-                                Style="{StaticResource IconButtonStyle}"/>
+                                Style="{StaticResource IconButtonStyle}">
+                            <fa:FontAwesomeImage Icon="SolidXmark" Width="10"/>
+                        </Button>
                     </DockPanel>
 
                     <!-- Footer buttons -->
@@ -490,9 +449,9 @@
                             <ColumnDefinition Width="16"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Content="Cancel" Command="{Binding CancelFormCommand}" 
+                        <Button Grid.Column="0" Content="{Binding Cancel, Source={x:Static core:LocalizationService.Instance}}" Command="{Binding CancelFormCommand}" 
                                 Style="{StaticResource SecondaryButtonStyle}"/>
-                        <Button Grid.Column="2" Content="Save Changes" Command="{Binding SaveProductCommand}"
+                        <Button Grid.Column="2" Content="{Binding SaveChanges, Source={x:Static core:LocalizationService.Instance}}" Command="{Binding SaveProductCommand}"
                                 Style="{StaticResource PrimaryButtonStyle}"/>
                     </Grid>
 
@@ -501,7 +460,8 @@
                         <StackPanel>
 
                             <!-- Image Picker -->
-                            <TextBlock Text="PRODUCT IMAGE" Style="{StaticResource FormLabelStyle}"/>
+                            <TextBlock Text="{Binding ProductImage, Source={x:Static core:LocalizationService.Instance}}" 
+                                       Style="{StaticResource FormLabelStyle}"/>
                             <Border CornerRadius="12" Height="140" Margin="0,0,0,16"
                                     Background="{StaticResource SurfaceLowBrush}"
                                     ClipToBounds="True">
@@ -553,44 +513,35 @@
                                 </Grid>
                             </Border>
 
-                            <TextBlock Text="ITEM NAME" Style="{StaticResource FormLabelStyle}"/>
-                            <TextBox Text="{Binding FormName, UpdateSourceTrigger=PropertyChanged}" 
-                                     Style="{StaticResource FormInputStyle}"/>
-
                             <TextBlock Text="CATEGORY" Style="{StaticResource FormLabelStyle}"/>
                             <ComboBox ItemsSource="{Binding ProductCategories}" SelectedItem="{Binding FormCategory}" 
                                       DisplayMemberPath="Name" Style="{StaticResource FormComboStyle}"/>
 
-                            <TextBlock Text="SKU" Style="{StaticResource FormLabelStyle}"/>
-                            <TextBox Text="{Binding FormSku, UpdateSourceTrigger=PropertyChanged}" 
+                            <TextBlock Text="ITEM NAME" Style="{StaticResource FormLabelStyle}"/>
+                            <TextBox Text="{Binding FormName, UpdateSourceTrigger=PropertyChanged}" 
                                      Style="{StaticResource FormInputStyle}"/>
 
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="16"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <StackPanel Grid.Column="0">
-                                    <TextBlock Text="WHOLESALE" Style="{StaticResource FormLabelStyle}"/>
-                                    <TextBox Text="{Binding FormWholesalePrice, UpdateSourceTrigger=PropertyChanged}" 
-                                             Style="{StaticResource FormInputStyle}"/>
-                                </StackPanel>
-                                <StackPanel Grid.Column="2">
-                                    <TextBlock Text="RETAIL" Style="{StaticResource FormLabelStyle}"/>
-                                    <TextBox Text="{Binding FormRetailPrice, UpdateSourceTrigger=PropertyChanged}" 
-                                             Style="{StaticResource FormInputStyle}"/>
-                                </StackPanel>
-                            </Grid>
+                            <StackPanel Visibility="{Binding FormCategory.IsService, Converter={StaticResource InverseBoolToVisConverter}}">
+                                <TextBlock Text="MINIMUM QUANTITY ALERT" Style="{StaticResource FormLabelStyle}"/>
+                                <TextBox Text="{Binding FormMinimumQuantityAlert, UpdateSourceTrigger=PropertyChanged}" 
+                                     Style="{StaticResource FormInputStyle}"/>
+                            </StackPanel>
 
-                            <TextBlock Text="COSTING METHOD" Style="{StaticResource FormLabelStyle}"/>
-                            <ComboBox SelectedValue="{Binding FormCostingMethod}"
+
+                            <TextBlock Text="SELLING PRICE" Style="{StaticResource FormLabelStyle}"/>
+                            <TextBox Text="{Binding FormRetailPrice, UpdateSourceTrigger=PropertyChanged}" 
+                                     Style="{StaticResource FormInputStyle}"/>
+                            <StackPanel Visibility="{Binding FormCategory.IsService, Converter={StaticResource InverseBoolToVisConverter}}">
+                                <TextBlock Text="COSTING METHOD" Style="{StaticResource FormLabelStyle}"/>
+                                <ComboBox SelectedValue="{Binding FormCostingMethod}"
                                       SelectedValuePath="Tag"
                                       Style="{StaticResource FormComboStyle}">
-                                <ComboBoxItem Content="FIFO" Tag="{x:Static local:CostingMethod.Fifo}"/>
-                                <ComboBoxItem Content="LIFO" Tag="{x:Static local:CostingMethod.Lifo}"/>
-                                <ComboBoxItem Content="Weighted Average" Tag="{x:Static local:CostingMethod.WeightedAverage}"/>
-                            </ComboBox>
+                                    <ComboBoxItem Content="{Binding CostingFifo,            Source={x:Static core:LocalizationService.Instance}}" Tag="{x:Static local:CostingMethod.Fifo}"/>
+                                    <ComboBoxItem Content="{Binding CostingLifo,            Source={x:Static core:LocalizationService.Instance}}" Tag="{x:Static local:CostingMethod.Lifo}"/>
+                                    <ComboBoxItem Content="{Binding CostingWeightedAverage, Source={x:Static core:LocalizationService.Instance}}" Tag="{x:Static local:CostingMethod.WeightedAverage}"/>
+                                </ComboBox>
+                            </StackPanel>
+
                         </StackPanel>
                     </ScrollViewer>
                 </DockPanel>
@@ -607,12 +558,25 @@
                 </Border.Effect>
                 <DockPanel>
                     <DockPanel DockPanel.Dock="Top" Margin="0,0,0,40">
-                        <TextBlock Text="Category Details" FontFamily="Manrope, Segoe UI" FontSize="24" FontWeight="ExtraBold" 
-                                   Foreground="{StaticResource OnSurfaceBrush}"/>
-                        <Button DockPanel.Dock="Right" HorizontalAlignment="Right" Content="?"
+                        <TextBlock FontFamily="Manrope, Segoe UI" FontSize="24" FontWeight="ExtraBold" 
+                                   Foreground="{StaticResource OnSurfaceBrush}">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Text" Value="{Binding AddItem, Source={x:Static core:LocalizationService.Instance}}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsCategoryEditing}" Value="True">
+                                            <Setter Property="Text" Value="{Binding EditItem, Source={x:Static core:LocalizationService.Instance}}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <Button DockPanel.Dock="Right" HorizontalAlignment="Right"
                                 Command="{Binding CancelCategoryFormCommand}"
                                 Width="40" Height="40" FontSize="16"
-                                Style="{StaticResource IconButtonStyle}"/>
+                                Style="{StaticResource IconButtonStyle}">
+                            <fa:FontAwesomeImage Icon="SolidXmark" Width="10"/>
+                        </Button>
                     </DockPanel>
 
                     <Grid DockPanel.Dock="Bottom" Margin="0,32,0,0">
@@ -621,9 +585,11 @@
                             <ColumnDefinition Width="16"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Content="Cancel" Command="{Binding CancelCategoryFormCommand}" 
+                        <Button Grid.Column="0" Content="{Binding Cancel, Source={x:Static core:LocalizationService.Instance}}"
+                                Command="{Binding CancelCategoryFormCommand}" 
                                 Style="{StaticResource SecondaryButtonStyle}"/>
-                        <Button Grid.Column="2" Content="Save Changes" Command="{Binding SaveCategoryCommand}"
+                        <Button Grid.Column="2" Content="{Binding SaveChanges, Source={x:Static core:LocalizationService.Instance}}"
+                                Command="{Binding SaveCategoryCommand}"
                                 Style="{StaticResource PrimaryButtonStyle}"/>
                     </Grid>
 
@@ -642,9 +608,9 @@
             </Border>
         </Border>
 
-        <!-- ??????????????????????????????????????????????????????????? -->
-        <!-- Delete Product Confirmation                                -->
-        <!-- ??????????????????????????????????????????????????????????? -->
+
+        <!-- Delete Product Confirmation -->
+
         <Border Background="#40191C1E"
                 Visibility="{Binding IsDeleteConfirmVisible, Converter={StaticResource BoolToVisConverter}}">
             <Border Background="White" CornerRadius="12" Width="420" VerticalAlignment="Center"
@@ -653,10 +619,10 @@
                     <DropShadowEffect BlurRadius="40" Opacity="0.15" ShadowDepth="0" Color="{StaticResource OnSurfaceColor}"/>
                 </Border.Effect>
                 <StackPanel>
-                    <TextBlock Text="??" FontSize="40" HorizontalAlignment="Center" Margin="0,0,0,16"/>
-                    <TextBlock Text="Confirm Deletion" FontFamily="Manrope, Segoe UI" FontSize="20" FontWeight="ExtraBold" 
+
+                    <TextBlock Text="{Binding ConfirmDeletion, Source={x:Static core:LocalizationService.Instance}}" FontFamily="Manrope, Segoe UI" FontSize="20" FontWeight="ExtraBold" 
                                Foreground="{StaticResource OnSurfaceBrush}" TextAlignment="Center" Margin="0,0,0,8"/>
-                    <TextBlock Text="Are you sure you want to delete this item? This action cannot be undone." 
+                    <TextBlock Text="{Binding DeleteWarning, Source={x:Static core:LocalizationService.Instance}}"
                                FontFamily="Inter, Segoe UI" FontSize="13" Foreground="{StaticResource OnSurfaceVariantBrush}" 
                                TextWrapping="Wrap" TextAlignment="Center" Margin="0,0,0,32"/>
                     <Grid>
@@ -665,9 +631,10 @@
                             <ColumnDefinition Width="16"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Content="Cancel" Command="{Binding CancelDeleteCommand}" 
+                        <Button Grid.Column="0" Content="{Binding Cancel, Source={x:Static core:LocalizationService.Instance}}" Command="{Binding CancelDeleteCommand}" 
                                 Style="{StaticResource SecondaryButtonStyle}"/>
-                        <Button Grid.Column="2" Content="Delete" Command="{Binding ConfirmDeleteProductCommand}">
+                        <Button Grid.Column="2"
+                                Content="{Binding Confirm, Source={x:Static core:LocalizationService.Instance}}" Command="{Binding ConfirmDeleteProductCommand}">
                             <Button.Style>
                                 <Style TargetType="Button" BasedOn="{StaticResource PrimaryButtonStyle}">
                                     <Setter Property="Background" Value="{StaticResource ErrorBrush}"/>
@@ -679,9 +646,7 @@
             </Border>
         </Border>
 
-        <!-- ??????????????????????????????????????????????????????????? -->
-        <!-- Delete Category Confirmation                               -->
-        <!-- ??????????????????????????????????????????????????????????? -->
+        <!-- Delete Category Confirmation  -->
         <Border Background="#40191C1E"
                 Visibility="{Binding IsCategoryDeleteConfirmVisible, Converter={StaticResource BoolToVisConverter}}">
             <Border Background="White" CornerRadius="12" Width="420" VerticalAlignment="Center"
@@ -690,10 +655,9 @@
                     <DropShadowEffect BlurRadius="40" Opacity="0.15" ShadowDepth="0" Color="{StaticResource OnSurfaceColor}"/>
                 </Border.Effect>
                 <StackPanel>
-                    <TextBlock Text="??" FontSize="40" HorizontalAlignment="Center" Margin="0,0,0,16"/>
-                    <TextBlock Text="Delete Category" FontFamily="Manrope, Segoe UI" FontSize="20" FontWeight="ExtraBold" 
+                    <TextBlock Text="{Binding ConfirmDeletion, Source={x:Static core:LocalizationService.Instance}}" FontFamily="Manrope, Segoe UI" FontSize="20" FontWeight="ExtraBold" 
                                Foreground="{StaticResource OnSurfaceBrush}" TextAlignment="Center" Margin="0,0,0,8"/>
-                    <TextBlock Text="Are you sure? Products in this category will need reassignment." 
+                    <TextBlock Text="{Binding DeleteWarning, Source={x:Static core:LocalizationService.Instance}}"
                                FontFamily="Inter, Segoe UI" FontSize="13" Foreground="{StaticResource OnSurfaceVariantBrush}" 
                                TextWrapping="Wrap" TextAlignment="Center" Margin="0,0,0,32"/>
                     <Grid>
@@ -702,9 +666,9 @@
                             <ColumnDefinition Width="16"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Column="0" Content="Cancel" Command="{Binding CancelCategoryDeleteCommand}" 
+                        <Button Grid.Column="0" Content="{Binding Cancel, Source={x:Static core:LocalizationService.Instance}}" Command="{Binding CancelCategoryDeleteCommand}" 
                                 Style="{StaticResource SecondaryButtonStyle}"/>
-                        <Button Grid.Column="2" Content="Delete" Command="{Binding ConfirmDeleteCategoryCommand}">
+                        <Button Grid.Column="2" Content="{Binding Confirm, Source={x:Static core:LocalizationService.Instance}}" Command="{Binding ConfirmDeleteCategoryCommand}">
                             <Button.Style>
                                 <Style TargetType="Button" BasedOn="{StaticResource PrimaryButtonStyle}">
                                     <Setter Property="Background" Value="{StaticResource ErrorBrush}"/>

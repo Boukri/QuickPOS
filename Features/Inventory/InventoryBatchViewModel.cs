@@ -19,47 +19,15 @@ public partial class InventoryBatchViewModel : ViewModelBase
     public ObservableCollection<ProductSummary> Products { get; } = [];
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(WeightedAverageCost))]
-    [NotifyPropertyChangedFor(nameof(TotalUnits))]
-    [NotifyPropertyChangedFor(nameof(TotalStockValue))]
     private ProductSummary? _selectedProduct;
 
-    //partial void OnSelectedProductChanged(ProductSummary? value)
-    //{
-    //    if (value is not null)
-    //    {
-    //        // Seed the receive-form prices from the currently saved product values.
-    //        _receiveSellPrice     = value.RetailPrice;
-    //        _receiveCostingMethod = value.CostingMethod;
-    //    }
-    //}
 
     //  Batch list  
     public ObservableCollection<StockBatchRowViewModel> Batches { get; } = [];
 
-    // ?? Computed stats ????????????????????????????????????????????????????
-    /// <summary>Sum of all remaining units across active batches.</summary>
-    public int TotalUnits => Batches.Sum(b => b.QuantityRemaining);
-
-    /// <summary>Total inventory value (? remaining × unit cost).</summary>
-    public decimal TotalStockValue => Batches.Sum(b => b.RemainingValue);
-
-    /// <summary>Weighted Average Cost = total value / total units.</summary>
-    public decimal WeightedAverageCost =>
-        TotalUnits > 0 ? Math.Round(TotalStockValue / TotalUnits, 4) : 0m;
-
-    // ?? COGS tracker ??????????????????????????????????????????????????????
-    [ObservableProperty]
-    private decimal _sessionCOGS;
-
-    [ObservableProperty]
-    private string _cogsMessage = string.Empty;
-
-    // ?? Dialog events ?????????????????????????????????????????????????????
+    //Dialog events
     public event EventHandler? ReceiveStockRequested;
     public event EventHandler? ReceiveStockCompleted;
-    public event EventHandler? SellRequested;
-    public event EventHandler? SellCompleted;
 
     // Receive-stock form
     [ObservableProperty]
@@ -123,8 +91,6 @@ public partial class InventoryBatchViewModel : ViewModelBase
             Batches.Clear();
             foreach (var b in batches)
                 Batches.Add(new StockBatchRowViewModel(b));
-
-            RefreshStats();
         }
         finally { IsBusy = false; }
     }
@@ -135,39 +101,39 @@ public partial class InventoryBatchViewModel : ViewModelBase
     private void ShowReceiveForm()
     {
         LoadProducts().ConfigureAwait(false);
-        _receiveQuantity = 1;
-        _receiveUnitCost = 0;
-        _receiveSellPrice = _selectedProduct?.RetailPrice ?? 0;
-        _receiveCostingMethod = _selectedProduct?.CostingMethod ?? CostingMethod.Fifo;
-        _receiveReference = string.Empty;
+        ReceiveQuantity = 1;
+        ReceiveUnitCost = 0;
+        ReceiveSellPrice = SelectedProduct?.ActualPrice ?? 0;
+        ReceiveCostingMethod = SelectedProduct?.CostingMethod ?? CostingMethod.Fifo;
+        ReceiveReference = string.Empty;
         ReceiveStockRequested?.Invoke(this, EventArgs.Empty);
     }
 
     [RelayCommand]
     private async Task ConfirmReceiveStock()
     {
-        if (_selectedProduct is null || _receiveQuantity <= 0 || _receiveUnitCost <= 0)
+        if (SelectedProduct is null || ReceiveQuantity <= 0 || ReceiveUnitCost <= 0)
             return;
 
         // Persist the new stock batch.
         await _stockService.ReceiveStockAsync(
-            productId: _selectedProduct.Id,
-            quantityReceived: _receiveQuantity,
-            unitCost: _receiveUnitCost,
+            productId: SelectedProduct.Id,
+            quantityReceived: ReceiveQuantity,
+            unitCost: ReceiveUnitCost,
             receivedAt: DateTime.UtcNow,
-            reference: string.IsNullOrWhiteSpace(_receiveReference) ? null : _receiveReference);
+            reference: string.IsNullOrWhiteSpace(ReceiveReference) ? null : ReceiveReference);
 
-        if (_receiveCostingMethod == CostingMethod.WeightedAverage)
+        if (ReceiveCostingMethod == CostingMethod.WeightedAverage)
         {
-            _receiveSellPrice = await _stockService.GetWeightedAverageCostAsync(_selectedProduct.Id);
+            ReceiveSellPrice = await _stockService.GetWeightedAverageCostAsync(SelectedProduct.Id);
         }
 
         // Update the product's retail price and costing method so the POS reflects the change.
-        var product = await _productRepo.GetByIdAsync(_selectedProduct.Id);
+        var product = await _productRepo.GetByIdAsync(SelectedProduct.Id);
         if (product is not null)
         {
-            product.RetailPrice = Math.Round(_receiveSellPrice, 0, MidpointRounding.AwayFromZero);
-            product.CostingMethod = _receiveCostingMethod;
+            product.ActualPrice = Math.Round(ReceiveSellPrice, 0, MidpointRounding.AwayFromZero);
+            product.CostingMethod = ReceiveCostingMethod;
             await _productRepo.UpdateAsync(product);
         }
 
@@ -177,26 +143,17 @@ public partial class InventoryBatchViewModel : ViewModelBase
         ReceiveStockCompleted?.Invoke(this, EventArgs.Empty);
         await LoadBatches();
     }
-    // Helpers  
-
-    private void RefreshStats()
-    {
-        OnPropertyChanged(nameof(TotalUnits));
-        OnPropertyChanged(nameof(TotalStockValue));
-        OnPropertyChanged(nameof(WeightedAverageCost));
     }
-}
 
 // ?? Supporting view-models ????????????????????????????????????????????????
 
 public class ProductSummary(Product p)
 {
     public int Id { get; } = p.Id;
-    public string Name { get; } = p.Name;
-    public string Sku { get; } = p.Sku;
-    public decimal RetailPrice { get; } = p.RetailPrice;
+    public string Name { get; } = p.Name; 
+    public decimal ActualPrice { get; } = p.ActualPrice;
     public CostingMethod CostingMethod { get; } = p.CostingMethod;
-    public override string ToString() => $"{Name}  [{Sku}]";
+    public override string ToString() => $"{Name}  [{ActualPrice}]";
 }
 
 public class StockBatchRowViewModel

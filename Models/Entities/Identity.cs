@@ -26,28 +26,31 @@ public class UserPermission
 
 public static class Permissions
 {
-    public const string NavSelling = "Nav.Selling";
-    public const string NavProducts = "Nav.Products";
-    public const string NavDashboard = "Nav.Dashboard";
-    public const string NavUsers = "Nav.Users";
+    public const string NavSelling    = "Nav.Selling";
+    public const string NavProducts   = "Nav.Products";
+    public const string NavDashboard  = "Nav.Dashboard";
+    public const string NavUsers      = "Nav.Users";
     public const string NavDailyClose = "Nav.DailyClose";
+    public const string NavInventory  = "Nav.Inventory";
 
-    public static readonly string[] AllPermissions = 
+    public static readonly string[] AllPermissions =
     {
         NavSelling,
         NavProducts,
         NavDashboard,
         NavUsers,
-        NavDailyClose
+        NavDailyClose,
+        NavInventory
     };
 
     public static string GetDisplayName(string permission) => permission switch
     {
-        NavSelling => "POS Terminal",
-        NavProducts => "Products & Services",
-        NavDashboard => "Financial Dashboard",
-        NavUsers => "Users & Roles",
+        NavSelling    => "POS Terminal",
+        NavProducts   => "Products & Services",
+        NavDashboard  => "Financial Dashboard",
+        NavUsers      => "Users & Roles",
         NavDailyClose => "Daily Close",
+        NavInventory  => "Inventory",
         _ => permission
     };
 }

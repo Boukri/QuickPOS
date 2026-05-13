@@ -33,4 +33,10 @@
     <Folder Include="QuickPOS\Features\Selling\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Page Update="Features\Dashboard\DashboardView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
 </Project>

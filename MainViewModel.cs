@@ -1,6 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Windows;
-using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using QuickPOS.Core;
 using QuickPOS.Features.DailyClose;
@@ -32,6 +31,8 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty] private bool _canAccessDailyClose = true;
     [ObservableProperty] private bool _canAccessInventory = true;
 
+    public bool IsLoggingOut { get; private set; }
+
     public MainViewModel(NavigationService navigationService, AuthenticationService authService)
     {
         _navigationService = navigationService;
@@ -54,19 +55,21 @@ public partial class MainViewModel : ObservableObject
 
     private void LoadPermissions()
     {
-        CanAccessSelling = _authService.HasPermission(Permissions.NavSelling);
-        CanAccessProducts = _authService.HasPermission(Permissions.NavProducts);
-        CanAccessDashboard = _authService.HasPermission(Permissions.NavDashboard);
-        CanAccessUsers = _authService.HasPermission(Permissions.NavUsers);
+        CanAccessSelling    = _authService.HasPermission(Permissions.NavSelling);
+        CanAccessProducts   = _authService.HasPermission(Permissions.NavProducts);
+        CanAccessDashboard  = _authService.HasPermission(Permissions.NavDashboard);
+        CanAccessUsers      = _authService.HasPermission(Permissions.NavUsers);
         CanAccessDailyClose = _authService.HasPermission(Permissions.NavDailyClose);
+        CanAccessInventory  = _authService.HasPermission(Permissions.NavInventory);
     }
 
     private void NavigateToFirstAvailable()
     {
-        if (CanAccessSelling) { NavigateToSelling(); return; }
-        if (CanAccessProducts) { NavigateToProducts(); return; }
-        if (CanAccessDashboard) { NavigateToDashboard(); return; }
-        if (CanAccessUsers) { NavigateToUsers(); return; }
+        if (CanAccessSelling)    { NavigateToSelling();    return; }
+        if (CanAccessProducts)   { NavigateToProducts();   return; }
+        if (CanAccessInventory)  { NavigateToInventory();  return; }
+        if (CanAccessDashboard)  { NavigateToDashboard();  return; }
+        if (CanAccessUsers)      { NavigateToUsers();      return; }
         if (CanAccessDailyClose) { NavigateToDailyClose(); return; }
     }
 
@@ -126,14 +129,16 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     private void NavigateToInventory()
     {
-        CurrentPageTitle = "Inventory Batches";
-        CurrentNavIndex = 5;
+        if (!CanAccessInventory) return;
+        CurrentPageTitle = Loc.PageTitleInventory;
+        CurrentNavIndex  = 5;
         _navigationService.NavigateTo<InventoryBatchViewModel>();
     }
 
     [RelayCommand]
     private async Task LogoutAsync()
     {
+        IsLoggingOut = true;
         await _authService.LogoutAsync();
         Application.Current.MainWindow?.Close();
         ((App)Application.Current).ShowLoginLoop();

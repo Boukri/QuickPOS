@@ -12,6 +12,7 @@ public class AuthenticationService
     private readonly CurrentUserProvider _currentUserProvider;
 
     public AppIdentityUser? CurrentUser { get; private set; }
+    public bool IsAdmin { get; private set; }
 
     public AuthenticationService(
         UserManager<AppIdentityUser> userManager,
@@ -36,6 +37,7 @@ public class AuthenticationService
         CurrentUser = user;
         _currentUserProvider.Username = user.UserName;
         await LoadUserPermissions();
+        IsAdmin = await _userManager.IsInRoleAsync(user, "Admin");
         return (true, "Login successful");
     }
 
@@ -43,6 +45,7 @@ public class AuthenticationService
     {
         CurrentUser = null;
         _currentUserProvider.Username = null;
+        IsAdmin = false;
         return Task.CompletedTask;
     }
 
@@ -60,6 +63,7 @@ public class AuthenticationService
 
     public bool HasPermission(string permissionKey)
     {
+        if (IsAdmin) return true;
         return CurrentUser?.Permissions.Any(p => p.PermissionKey == permissionKey) ?? false;
     }
 

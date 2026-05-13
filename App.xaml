@@ -20,6 +20,7 @@
             <core:InverseBoolConverter x:Key="InverseBoolConverter"/>
             <core:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisConverter"/>
             <core:NullToBoolConverter x:Key="NullToBoolConverter"/>
+            <core:GreaterThanZeroVisibilityConverter x:Key="GreaterThanZeroVisibilityConverter"/>
         </ResourceDictionary>
     </Application.Resources>
   

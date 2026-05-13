@@ -42,7 +42,8 @@ public class AllIdentityUsersSpec : Specification<AppIdentityUser>
 {
     public AllIdentityUsersSpec()
     {
-        Query.OrderBy(u => u.FullName);
+        Query.Include(u => u.Permissions)
+             .OrderBy(u => u.FullName);
     }
 }
 

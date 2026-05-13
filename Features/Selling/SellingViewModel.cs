@@ -28,12 +28,7 @@ public partial class SellingViewModel : ViewModelBase
 
     [ObservableProperty]
     private double _cartPanelWidth;
-
-    partial void OnCartPanelWidthChanged(double value)
-    {
-        _settings.Settings.CartPanelWidth = value;
-        _settings.Save();
-    }
+    
 
     public SellingViewModel(IRepositoryBase<Product> productRepo, IRepositoryBase<Transaction> transactionRepo, IRepositoryBase<CategoryModel> categoryRepo, CartService cartService, UserSettingsService settings, IStockService stockService)
     {
@@ -44,7 +39,13 @@ public partial class SellingViewModel : ViewModelBase
         _settings = settings;
         _stockService = stockService;
         _cartPanelWidth = settings.Settings.CartPanelWidth;
-        LoadCategoriesCommand.ExecuteAsync(null);
+        LoadCategories().ConfigureAwait(false);
+    }
+
+    partial void OnCartPanelWidthChanged(double value)
+    {
+        _settings.Settings.CartPanelWidth = value;
+        _settings.Save();
     }
 
     [RelayCommand]
@@ -65,7 +66,7 @@ public partial class SellingViewModel : ViewModelBase
         try
         {
             var spec = new Data.Specifications.ProductsForSellingSpec(
-                SelectedCategory?.CategoryId);
+                _selectedCategory?.CategoryId);
             var products = await _productRepo.ListAsync(spec);
             Products.Clear();
             foreach (var p in products)
@@ -138,7 +139,7 @@ public partial class SellingViewModel : ViewModelBase
 
     partial void OnSelectedCategoryChanged(CategoryFilterItem? value)
     {
-        LoadProductsCommand.ExecuteAsync(null);
+        LoadProducts().ConfigureAwait(false);
     }
 }
 
@@ -151,7 +152,7 @@ public record CategoryFilterItem(int? CategoryId, string Name)
 /// Wraps a Product for the POS view, enriching it with live stock data
 /// and a costing-method-aware unit cost so the card can show alerts.
 /// </summary>
-public class SellingProductViewModel : CommunityToolkit.Mvvm.ComponentModel.ObservableObject
+public class SellingProductViewModel : ObservableObject
 {
     private const int LowStockThreshold = 5;
 
@@ -161,7 +162,7 @@ public class SellingProductViewModel : CommunityToolkit.Mvvm.ComponentModel.Obse
     public int Id               => Product.Id;
     public string Name          => Product.Name;
     public string? ImagePath    => Product.ImagePath;
-    public decimal RetailPrice  => Product.RetailPrice;
+    public decimal ActualPrice  => Product.ActualPrice;
     public bool IsService       => Product.IsService;
     public CategoryModel Category   => Product.Category;
     public CostingMethod CostingMethod => Product.CostingMethod;

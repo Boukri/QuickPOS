@@ -1,5 +1,4 @@
 using System.Collections.ObjectModel;
-using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using QuickPOS.Models.Entities;
@@ -11,7 +10,7 @@ public partial class CartService : ObservableObject
     public ObservableCollection<CartItemViewModel> Items { get; } = [];
 
     [ObservableProperty]
-    private decimal _totalAmount;
+    public decimal _totalAmount;
 
     [RelayCommand]
     public void AddItem(Product product)
@@ -27,7 +26,7 @@ public partial class CartService : ObservableObject
             {
                 ProductId = product.Id,
                 ProductName = product.Name,
-                UnitPrice = product.RetailPrice,
+                UnitPrice = product.ActualPrice,
                 Quantity = 1,
                 ImagePath = product.ImagePath
             });
@@ -81,7 +80,7 @@ public partial class CartItemViewModel : ObservableObject
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(Total))]
-    private int _quantity;
+    public int _quantity;
 
-    public decimal Total => _quantity * UnitPrice;
+    public decimal Total => Quantity * UnitPrice;
 }

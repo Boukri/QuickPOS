@@ -1,5 +1,4 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.EntityFrameworkCore;
 using Ardalis.Specification;
@@ -14,38 +13,58 @@ public partial class DailyCloseViewModel : ViewModelBase
 {
     private readonly QuickPosDbContext _db;
     private readonly IRepositoryBase<DailyCloseModel> _dailyCloseRepo;
+    private readonly AuthenticationService _authService;
+    private readonly CurrentUserProvider _currentUser;
 
+    // ?? Today KPI totals ?????????????????????????????????????????????????????
     [ObservableProperty] private decimal _systemCashTotal;
     [ObservableProperty] private decimal _systemCardTotal;
     [ObservableProperty] private decimal _systemPointsTotal;
     [ObservableProperty] private decimal _systemGrandTotal;
 
-    [ObservableProperty] private decimal _manualCashCount;
+    // ?? Cash-out modal state ?????????????????????????????????????????????????
+    [ObservableProperty] private string _manualCashCount = string.Empty;
     [ObservableProperty] private decimal _cashDiscrepancy;
-
     [ObservableProperty] private bool _isCashOutModalVisible;
 
-    // Cash denomination counts
-    [ObservableProperty] private int _count100;
-    [ObservableProperty] private int _count50;
-    [ObservableProperty] private int _count20;
-    [ObservableProperty] private int _count10;
-    [ObservableProperty] private int _count5;
-    [ObservableProperty] private int _count1;
-    [ObservableProperty] private int _countQuarters;
-    [ObservableProperty] private int _countDimes;
-    [ObservableProperty] private int _countNickels;
-    [ObservableProperty] private int _countPennies;
-
-    public ObservableCollection<TransactionSummaryItem> TodayTransactions { get; } = [];
-
-    public DailyCloseViewModel(QuickPosDbContext db, IRepositoryBase<DailyCloseModel> dailyCloseRepo)
+    partial void OnManualCashCountChanged(string value)
     {
-        _db = db;
-        _dailyCloseRepo = dailyCloseRepo;
-        LoadTodayDataCommand.ExecuteAsync(null);
+        CashDiscrepancy = decimal.TryParse(value, out var entered)
+            ? entered - SystemCashTotal
+            : 0;
     }
 
+    // ?? Tab navigation ???????????????????????????????????????????????????????
+    [ObservableProperty] private int _activeTab;
+
+    partial void OnActiveTabChanged(int value)
+    {
+        if (value == 1 && IsAdmin)
+            LoadHistory().ConfigureAwait(false);
+    }
+
+    // ?? Admin gate ???????????????????????????????????????????????????????????
+    public bool IsAdmin => _authService.IsAdmin;
+
+    // ?? Collections ??????????????????????????????????????????????????????????
+    public ObservableCollection<TransactionSummaryItem> TodayTransactions { get; } = [];
+    public ObservableCollection<DailyCloseHistoryRow>   ClosureHistory    { get; } = [];
+
+    // ?? Constructor ??????????????????????????????????????????????????????????
+    public DailyCloseViewModel(
+        QuickPosDbContext db,
+        CurrentUserProvider currentUser,
+        IRepositoryBase<DailyCloseModel> dailyCloseRepo,
+        AuthenticationService authService)
+    {
+        _db             = db;
+        _dailyCloseRepo = dailyCloseRepo;
+        _currentUser    = currentUser;
+        _authService    = authService;
+        LoadTodayData().ConfigureAwait(false);
+    }
+
+    // ?? Today data ???????????????????????????????????????????????????????????
     [RelayCommand]
     private async Task LoadTodayData()
     {
@@ -57,10 +76,10 @@ public partial class DailyCloseViewModel : ViewModelBase
                 .Where(t => t.CreatedAt.Date == today)
                 .ToListAsync();
 
-            SystemCashTotal = transactions.Where(t => t.PaymentMethod == "Cash").Sum(t => t.TotalAmount);
-            SystemCardTotal = transactions.Where(t => t.PaymentMethod == "Card").Sum(t => t.TotalAmount);
+            SystemCashTotal   = transactions.Where(t => t.PaymentMethod == "Cash").Sum(t => t.TotalAmount);
+            SystemCardTotal   = transactions.Where(t => t.PaymentMethod == "Card").Sum(t => t.TotalAmount);
             SystemPointsTotal = transactions.Where(t => t.PaymentMethod == "Points").Sum(t => t.TotalAmount);
-            SystemGrandTotal = SystemCashTotal + SystemCardTotal + SystemPointsTotal;
+            SystemGrandTotal  = SystemCashTotal + SystemCardTotal + SystemPointsTotal;
 
             TodayTransactions.Clear();
             foreach (var t in transactions.OrderByDescending(t => t.CreatedAt))
@@ -68,63 +87,98 @@ public partial class DailyCloseViewModel : ViewModelBase
                 TodayTransactions.Add(new TransactionSummaryItem
                 {
                     TransactionId = t.Id,
-                    Amount = t.TotalAmount,
+                    Amount        = t.TotalAmount,
                     PaymentMethod = t.PaymentMethod,
-                    Time = t.CreatedAt
+                    Time          = t.CreatedAt
                 });
             }
         }
         finally { IsBusy = false; }
     }
 
-    [RelayCommand]
-    private void ShowCashOutModal() => IsCashOutModalVisible = true;
+    // ?? Tab commands ?????????????????????????????????????????????????????????
+    [RelayCommand] private void SwitchToTodayTab()   => ActiveTab = 0;
+    [RelayCommand] private void SwitchToHistoryTab() { if (IsAdmin) ActiveTab = 1; }
 
+    // ?? History data (admin only) ????????????????????????????????????????????
     [RelayCommand]
-    private void CloseCashOutModal() => IsCashOutModalVisible = false;
+    private async Task LoadHistory()
+    {
+        IsBusy = true;
+        try
+        {
+            var records = await _db.DailyCloses
+                .OrderByDescending(d => d.CreatedAt)
+                .ToListAsync();
+
+            ClosureHistory.Clear();
+            foreach (var r in records)
+            {
+                ClosureHistory.Add(new DailyCloseHistoryRow
+                {
+                    Id           = r.Id,
+                    ClosedAt     = r.CreatedAt,
+                    SystemCash   = r.SystemCashTotal,
+                    SystemCard   = r.SystemCardTotal,
+                    SystemPoints = r.SystemPointsTotal,
+                    SystemTotal  = r.SystemCashTotal + r.SystemCardTotal + r.SystemPointsTotal,
+                    ManualCash   = r.ManualCashTotal,
+                    Discrepancy  = r.CashDiscrepancy,
+                    ClosedBy     = r.ClosedBy
+                });
+            }
+        }
+        finally { IsBusy = false; }
+    }
+
+    // ?? Cash-out modal commands ???????????????????????????????????????????????
+    [RelayCommand] private void ShowCashOutModal()  => IsCashOutModalVisible = true;
+    [RelayCommand] private void CloseCashOutModal() => IsCashOutModalVisible = false;
 
     [RelayCommand]
     private async Task SubmitCashOut()
     {
+        _ = decimal.TryParse(ManualCashCount, out var manualTotal);
+
         var dailyClose = new DailyCloseModel
         {
-            CreatedAt = DateTime.UtcNow,
-            SystemCashTotal = SystemCashTotal,
-            SystemCardTotal = SystemCardTotal,
+            CreatedAt        = DateTime.Now,
+            SystemCashTotal  = SystemCashTotal,
+            SystemCardTotal  = SystemCardTotal,
             SystemPointsTotal = SystemPointsTotal,
-            ManualCashTotal = ManualCashCount,
-            ClosedBy = "Current User"
+            ManualCashTotal  = manualTotal,
+            ClosedBy         = _currentUser.Username ?? "System"
         };
 
         await _dailyCloseRepo.AddAsync(dailyClose);
         IsCashOutModalVisible = false;
-    }
+        ManualCashCount       = string.Empty;
 
-    private void RecalculateManualCount()
-    {
-        ManualCashCount = (Count100 * 100m) + (Count50 * 50m) + (Count20 * 20m) + 
-                          (Count10 * 10m) + (Count5 * 5m) + (Count1 * 1m) +
-                          (CountQuarters * 0.25m) + (CountDimes * 0.10m) + 
-                          (CountNickels * 0.05m) + (CountPennies * 0.01m);
-        CashDiscrepancy = ManualCashCount - SystemCashTotal;
+        // refresh history so the new record appears immediately
+        if (IsAdmin)
+            await LoadHistory();
     }
-
-    partial void OnCount100Changed(int value) => RecalculateManualCount();
-    partial void OnCount50Changed(int value) => RecalculateManualCount();
-    partial void OnCount20Changed(int value) => RecalculateManualCount();
-    partial void OnCount10Changed(int value) => RecalculateManualCount();
-    partial void OnCount5Changed(int value) => RecalculateManualCount();
-    partial void OnCount1Changed(int value) => RecalculateManualCount();
-    partial void OnCountQuartersChanged(int value) => RecalculateManualCount();
-    partial void OnCountDimesChanged(int value) => RecalculateManualCount();
-    partial void OnCountNickelsChanged(int value) => RecalculateManualCount();
-    partial void OnCountPenniesChanged(int value) => RecalculateManualCount();
 }
+
+// ?? Supporting row models ?????????????????????????????????????????????????????
 
 public class TransactionSummaryItem
 {
-    public int TransactionId { get; set; }
-    public decimal Amount { get; set; }
-    public string PaymentMethod { get; set; } = string.Empty;
-    public DateTime Time { get; set; }
+    public int    TransactionId { get; set; }
+    public decimal Amount       { get; set; }
+    public string  PaymentMethod { get; set; } = string.Empty;
+    public DateTime Time         { get; set; }
+}
+
+public class DailyCloseHistoryRow
+{
+    public int     Id           { get; set; }
+    public DateTime ClosedAt    { get; set; }
+    public decimal SystemCash   { get; set; }
+    public decimal SystemCard   { get; set; }
+    public decimal SystemPoints { get; set; }
+    public decimal SystemTotal  { get; set; }
+    public decimal ManualCash   { get; set; }
+    public decimal Discrepancy  { get; set; }
+    public string  ClosedBy     { get; set; } = string.Empty;
 }

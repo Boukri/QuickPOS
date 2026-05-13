@@ -13,7 +13,7 @@ public partial class ProductsViewModel : ViewModelBase
 {
     private readonly IRepositoryBase<Product> _productRepo;
     private readonly IRepositoryBase<CategoryModel> _categoryRepo;
-
+    public LocalizationService Loc => LocalizationService.Instance;
     // Tab: 0 = Products, 1 = Categories
     [ObservableProperty]
     private int _activeTab;
@@ -33,7 +33,7 @@ public partial class ProductsViewModel : ViewModelBase
     [ObservableProperty]
     private CategoryModel? _formCategory;
     [ObservableProperty]
-    private string _formSku = string.Empty;
+    private int _formMinimumQuantityAlert;
     [ObservableProperty]
     private decimal _formWholesalePrice;
     [ObservableProperty]
@@ -49,6 +49,11 @@ public partial class ProductsViewModel : ViewModelBase
 
     private int? _editingProductId;
     private ProductRowViewModel? _pendingDeleteProduct;
+
+    [ObservableProperty]
+    private bool _isProductEditing;
+    [ObservableProperty]
+    private bool _isCategoryEditing;
 
     // --- Categories ---
     public ObservableCollection<CategoryRowViewModel> CategoryRows { get; } = [];
@@ -72,7 +77,7 @@ public partial class ProductsViewModel : ViewModelBase
     {
         _productRepo = productRepo;
         _categoryRepo = categoryRepo;
-        LoadDataCommand.ExecuteAsync(null);
+        LoadData().ConfigureAwait(false);
     }
 
     [RelayCommand]
@@ -128,9 +133,9 @@ public partial class ProductsViewModel : ViewModelBase
     private void ShowAddForm()
     {
         _editingProductId = null;
-        FormName = string.Empty;
+        IsProductEditing = false;
         FormCategory = ProductCategories.FirstOrDefault(c => !c.IsService);
-        FormSku = string.Empty;
+        FormMinimumQuantityAlert = 0;
         FormWholesalePrice = 0;
         FormRetailPrice = 0;
         FormIsService = false;
@@ -148,10 +153,9 @@ public partial class ProductsViewModel : ViewModelBase
     private void EditProduct(ProductRowViewModel row)
     {
         _editingProductId = row.Id;
-        FormName = row.Name;
+        IsProductEditing = true;
         FormCategory = ProductCategories.FirstOrDefault(c => c.Id == row.CategoryId);
-        FormSku = row.Sku;
-        FormWholesalePrice = row.WholesalePrice;
+        FormMinimumQuantityAlert = row.MinimumQuantityAlert;
         FormRetailPrice = row.RetailPrice;
         FormIsService = row.IsService;
         FormCostingMethod = row.CostingMethod;
@@ -174,7 +178,6 @@ public partial class ProductsViewModel : ViewModelBase
 
     [RelayCommand]
     private void ClearImage() => FormImagePath = null;
-
     [RelayCommand]
     private async Task SaveProduct()
     {
@@ -185,9 +188,8 @@ public partial class ProductsViewModel : ViewModelBase
             {
                 product.Name = FormName;
                 product.CategoryId = FormCategory?.Id ?? 0;
-                product.Sku = FormSku;
-                product.WholesalePrice = FormWholesalePrice;
-                product.RetailPrice = FormRetailPrice;
+                product.MinimumQuantityAlert = FormMinimumQuantityAlert;
+                product.ActualPrice = FormRetailPrice;
                 product.IsService = FormIsService;
                 product.CostingMethod = FormCostingMethod;
                 product.ImagePath = FormImagePath;
@@ -200,9 +202,8 @@ public partial class ProductsViewModel : ViewModelBase
             {
                 Name = FormName,
                 CategoryId = FormCategory?.Id ?? 0,
-                Sku = FormSku,
-                WholesalePrice = FormWholesalePrice,
-                RetailPrice = FormRetailPrice,
+                MinimumQuantityAlert = FormMinimumQuantityAlert,
+                ActualPrice = FormRetailPrice,
                 IsService = FormIsService,
                 CostingMethod = FormCostingMethod,
                 ImagePath = FormImagePath
@@ -233,7 +234,7 @@ public partial class ProductsViewModel : ViewModelBase
             }
         }
         _pendingDeleteProduct = null;
-        _isDeleteConfirmVisible = false;
+        IsDeleteConfirmVisible = false;
     }
 
     [RelayCommand]
@@ -245,13 +246,13 @@ public partial class ProductsViewModel : ViewModelBase
 
     [RelayCommand]
     private void CancelForm() => IsFormVisible = false;
-
     // ===================== CATEGORIES =====================
 
     [RelayCommand]
     private void ShowAddCategoryForm()
     {
         _editingCategoryId = null;
+        IsCategoryEditing = false;
         CatFormName = string.Empty;
         CatFormIsService = false;
         IsCategoryFormVisible = true;
@@ -261,6 +262,7 @@ public partial class ProductsViewModel : ViewModelBase
     private void EditCategory(CategoryRowViewModel row)
     {
         _editingCategoryId = row.Id;
+        IsCategoryEditing = true;
         CatFormName = row.Name;
         CatFormIsService = row.IsService;
         IsCategoryFormVisible = true;
@@ -276,7 +278,6 @@ public partial class ProductsViewModel : ViewModelBase
             {
                 cat.Name = CatFormName;
                 cat.IsService = CatFormIsService;
-                await _categoryRepo.UpdateAsync(cat);
             }
         }
         else
@@ -334,13 +335,13 @@ public class ProductRowViewModel
     public string Name { get; }
     public int CategoryId { get; }
     public string CategoryName { get; }
-    public string Sku { get; }
-    public decimal WholesalePrice { get; }
-    public decimal RetailPrice { get; }
+    public int MinimumQuantityAlert { get; set; }
+    public int ActualQuantity { get; set; }
+    public decimal ActualPrice { get; set; }
+    public decimal RetailPrice => ActualPrice;
     public bool IsService { get; }
     public string? ImagePath { get; }
     public CostingMethod CostingMethod { get; }
-    public decimal ProfitMargin => RetailPrice > 0 ? Math.Round((RetailPrice - WholesalePrice) / RetailPrice * 100, 1) : 0;
 
     public ProductRowViewModel(Product p)
     {
@@ -348,9 +349,9 @@ public class ProductRowViewModel
         Name = p.Name;
         CategoryId = p.CategoryId;
         CategoryName = p.Category?.Name ?? "Unknown";
-        Sku = p.Sku;
-        WholesalePrice = p.WholesalePrice;
-        RetailPrice = p.RetailPrice;
+        MinimumQuantityAlert = p.MinimumQuantityAlert;
+        ActualQuantity = p.ActualQuantity;
+        ActualPrice = p.ActualPrice;
         IsService = p.IsService;
         CostingMethod = p.CostingMethod;
         ImagePath = p.ImagePath;
